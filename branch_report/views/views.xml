@@ -9,6 +9,32 @@
                 <xpath expr="//header" position="inside">
                     <button name="%(branch_report.create_branch_report_wizard)d" string="Branch Report" type="action" class="oe_highlight"/>
                 </xpath>
+
+
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="currency_note" invisible="1"/>
+                    <field name="five_th"   attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('currency_note','=',False)]}"/>
+                    <field name="one_th"   attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('currency_note','=',False)]}"/>
+                    <field name="five_hundred"   attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('currency_note','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
+        <record id="partner_form_currency_note" model="ir.ui.view">
+            <field name="name">report.form.currency_note</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="/form/sheet/group/group/field[@name='category_id']" position="after">-->
+                    <field name="branch_id" position="after">
+                        <field name="ceo_currency_check" />
+                    </field>
+
+<!--                </xpath>-->
             </field>
         </record>
     </data>

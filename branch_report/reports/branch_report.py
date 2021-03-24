@@ -51,6 +51,38 @@ class ReportAccountHashIntegrity(models.AbstractModel):
     #         'docs': total_values,
     #     }
 
+    def calc_total_balance(self, cus_mod):
+        lst_db = []
+        lst_cr = []
+        total_debit = 0.0
+        total_credit = 0.0
+
+        for crdbt in cus_mod:
+            if crdbt.debit:
+                lst_db.append(crdbt.debit)
+            else:
+                lst_db.append(0.0)
+
+            if crdbt.credit:
+                lst_cr.append(crdbt.credit)
+
+            else:
+                lst_cr.append(0.0)
+
+        for tot_deb in lst_db:
+            total_debit = total_debit + tot_deb
+
+        tot_debit = int(round(total_debit))
+
+        for tot_cr in lst_cr:
+            total_credit = total_credit + tot_cr
+
+        tot_credit = int(round(total_credit))
+
+        total_bal = tot_debit - tot_credit
+
+        return total_bal
+
     @api.model
     def _get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
@@ -75,11 +107,41 @@ class ReportAccountHashIntegrity(models.AbstractModel):
         customer_type = self.env['account.payment'].search([('date', '>=', date_from),('date', '<=', date_to), ('branch_id.id', '=', selected_id),  ('state', '=', 'posted'),('partner_type','=', 'customer')])
         customer_type_vendor = self.env['account.payment'].search([('date', '>=', date_from),('date', '<=', date_to), ('state', '=', 'posted'),('branch_id.id', '=', selected_id),('partner_type','=', 'supplier')])
         customer_method = self.env['account.payment'].search([('date', '>=', date_from),('date', '<=', date_to),  ('state', '=', 'posted'),('branch_id.id', '=', selected_id),('payment_method_id', '=', 'Checks')])
-
+        curncy_note = self.env['account.payment'].search([('date', '>=', date_from),('date', '<=', date_to),  ('state', '=', 'posted'),('branch_id.id', '=', selected_id),('partner_id.ceo_currency_check','=',True)])
         account_move_line = self.env['account.move'].search([('date', '>=', date_from),('date', '<=', date_to),('journal_id', '=', 'Miscellaneous Operations'),('branch_id.id', '=', selected_id),('state', '=', 'posted')])
         # account_move_line = self.env['account.move'].search([('journal_id', '=', 'Miscellaneous Operations')])
         account_line = []
         account_line1 = []
+
+        account_move_line_data = self.env['account.move.line'].search([('date', '>=', date_from),('date', '<=', date_to),('journal_id.name', '=', 'Miscellaneous Operations'),('move_id.branch_id.id', '=', selected_id),('move_id.state', '=', 'posted')])
+
+
+
+        acc_data=[]
+
+        for dt in account_move_line_data:
+            val_updated = False
+            if dt.account_id.name == 'Refreshment':
+                s=''
+            for acc in acc_data:
+                ac_id= acc['acc_id']
+                nm= acc['name']
+                bal = acc['bal']
+                if ac_id == dt.account_id.id:
+                    acount_total_bal =  self.calc_total_balance(dt)
+                    acc['bal'] = acc['bal']+acount_total_bal
+                    val_updated = True
+
+
+            else:
+                if val_updated == False:
+                    acc_total_balance= self.calc_total_balance(dt)
+                    acc_data.append({
+                        'acc_id':dt.account_id.id,
+                        'name'  : dt.account_id.name,
+                        'bal'   : acc_total_balance
+                    })
+
 
         # name = account_line[]
         for i in account_move_line.line_ids:
@@ -185,6 +247,15 @@ class ReportAccountHashIntegrity(models.AbstractModel):
             })
 
 
+        five_th_notes=0
+        one_th_notes =0
+        five_hndrd_notes =0
+        for note in curncy_note:
+            five_th_notes = five_th_notes + note.five_th
+            one_th_notes   = one_th_notes  + note.one_th
+            five_hndrd_notes  = five_hndrd_notes + note.five_hundred
+
+
         return {
             'doc_ids': docids,
             'doc_model': 'account.payment',
@@ -197,4 +268,9 @@ class ReportAccountHashIntegrity(models.AbstractModel):
             'customer_method_list': customer_method_list,
             'account_line': account_line,
             'out_refund_list': out_refund_list,
+            'acc_total_list':acc_data,
+            'fivth_notes' :five_th_notes,
+            'oneth_note' :one_th_notes,
+            'five_hndrd' : five_hndrd_notes
+
         }
