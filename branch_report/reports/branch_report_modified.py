@@ -153,6 +153,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
 
         all_acc_open_bal=0.0
         acc_bals=[]
+        acc_wise_bal_lst1 = []
         cash_bank_acc = self.env['account.account'].search([('user_type_id.name', '=', 'Bank and Cash')])
         for res_acc in cash_bank_acc:
             acc_jr_item = self.env['account.move.line'].search([('account_id','=',res_acc.id),('date', '<', date_from),('branch_id.id', '=', selected_id),('move_id.state', '=', 'posted')])
@@ -164,7 +165,25 @@ class ReportAccountHashIntegrity(models.AbstractModel):
             })
             acc_bal =0.0
         #end of for opening balance of accounts with type 'bank and cash'
+       #test
 
+            acc_data = self.env['account.move.line'].search(
+                [('account_id', '=', res_acc.id), ('date', '>=', date_from), ('date', '<=', date_to),
+                 ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted')])
+
+            for rec1 in acc_data:
+                dbt1 = 0.0
+                if rec1.debit:
+                    dbt1 = rec1.debit
+
+                acc_wise_bal_lst1.append({
+                    'partner_id': rec1.partner_id.id,
+                    'account_id': res_acc.id,
+                    'acc_partner_name': (rec1.partner_id.name if rec1.partner_id.name else "") + '[' + res_acc.name + ']',
+                    'acc_name': res_acc.name,
+                    'debit': dbt1
+                })
+       #test
        # all account debit(type [cash and bank])  for wizard date range
         acc_wise_bal_lst = []
 
@@ -174,16 +193,14 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                  ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted')])
 
 
-            partnr_name = ''
-            account_name = ''
+
             for rec in acc_data:
-                # account_name = cb_acnt.name
+
                 dbt = 0.0
                 val_updated= False
                 if rec.debit:
                     dbt = rec.debit
-                # if rec.partner_id:
-                #     partnr_name= rec.partner_id.name
+
                 for awbl in acc_wise_bal_lst:
 
                     if rec.partner_id:
@@ -201,42 +218,44 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                             'acc_name': cb_acnt.name,
                             'debit': dbt
                         })
-                # ac_total_debit=self.calc_total_dbt_crd(acc_data,True)
-                # acc_wise_bal_lst.append({
-                #     res_acc.name :ac_total_debit
-                # })
 
 
 
 
 
 
+        #for showroom expenses calculating accounts'type cash and bank' credit values
+        # ajitem-----> account Journal items
+        acc_data = []
+        for cr_accnts in cash_bank_acc:
+            ajitem =self.env['account.move.line'].search(
+                [('account_id', '=', cr_accnts.id), ('date', '>=', date_from), ('date', '<=', date_to),
+                 ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted')])
 
 
-        acc_data=[]
-
-        for dt in account_move_line_data:
-            val_updated = False
-            if dt.account_id.name == 'Refreshment':
-                s=''
-            for acc in acc_data:
-                ac_id= acc['acc_id']
-                nm= acc['name']
-                bal = acc['bal']
-                if ac_id == dt.account_id.id:
-                    acount_total_bal =  self.calc_total_balance(dt)
-                    acc['bal'] = acc['bal']+acount_total_bal
-                    val_updated = True
 
 
-            else:
-                if val_updated == False:
-                    acc_total_balance= self.calc_total_balance(dt)
-                    acc_data.append({
-                        'acc_id':dt.account_id.id,
-                        'name'  : dt.account_id.name,
-                        'bal'   : acc_total_balance
-                    })
+            for dt in ajitem:
+                val_updated = False
+
+                for acc in acc_data:
+                    ac_id= acc['acc_id']
+                    nm= acc['name']
+                    bal = acc['bal']
+                    if ac_id == dt.account_id.id:
+                        acount_total_bal =   self.calc_total_dbt_crd(dt,False)
+                        acc['bal'] = acc['bal']+acount_total_bal
+                        val_updated = True
+
+
+                else:
+                    if val_updated == False:
+                        acc_total_balance= self.calc_total_dbt_crd(dt,False)
+                        acc_data.append({
+                            'acc_id':dt.account_id.id,
+                            'name'  : dt.account_id.name,
+                            'bal'   : acc_total_balance
+                        })
 
 
         # name = account_line[]

@@ -127,6 +127,7 @@
                                     Opening Cash Balance
                                 </div>
                                 <div class="col-2 text-right all_border border-right-0 pb-0 bold_pt_pb">
+                                    <t t-esc="all_acc_ob"/>
                                     <!--                                <t t-set="opening_balance" t-value="(total_receipt - total_expense)"/>-->
                                 </div>
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
@@ -159,17 +160,30 @@
                                             <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_receipt" t-value="0"/>
-                                                    <t t-foreach="customer_list" t-as="val">
+<!--                                                    <t t-foreach="customer_list" t-as="val">-->
+<!--                                                        <tr>-->
+<!--                                                            <td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">-->
+<!--                                                                <span t-esc="val['partner_id']"/>(<span t-esc="val['journal_name']"/>)-->
+<!--                                                            </td>-->
+<!--                                                            <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">-->
+<!--                                                                <span t-esc="val['amount']"/>-->
+<!--                                                            </td>-->
+
+<!--                                                        </tr>-->
+<!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
+<!--                                                    </t>-->
+                                                    <t t-foreach="acc_debits" t-as="ac_dbt">
                                                         <tr>
                                                             <td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">
-                                                                <span t-esc="val['partner_id']"/>(<span t-esc="val['journal_name']"/>)
+                                                                <span t-esc="ac_dbt['acc_partner_name']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">
-                                                                <span t-esc="val['amount']"/>
+                                                                <span t-esc="ac_dbt['debit']"/>
                                                             </td>
 
                                                         </tr>
-                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>
+                                                         <t t-set="total_receipt" t-value="(total_receipt + ac_dbt['debit'])"/>
+<!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
                                                     </t>
                                                 </tbody>
                                             </table>

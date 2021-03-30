@@ -37,5 +37,35 @@
 <!--                </xpath>-->
             </field>
         </record>
+
+<!--        <record id="city_custom_sale_report_view_pivot" model="ir.ui.view">-->
+<!--            <field name="name">sale.pivot.city.custom</field>-->
+<!--            <field name="model">sale.report</field>-->
+
+<!--&lt;!&ndash;            <field name="inherit_id" ref="sale_enterprise.sale_report_view_pivot"/>&ndash;&gt;-->
+<!--            <field name="arch" type="xml">-->
+<!--                   <pivot string="Sales Analysis">-->
+<!--                        <field name="city1" type="row" />-->
+<!--                    </pivot>-->
+<!--&lt;!&ndash;              <xpath expr="//field[@name='categ_id']" position="after">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <field name="city1" type="row" />&ndash;&gt;-->
+<!--&lt;!&ndash;                </xpath>&ndash;&gt;-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--         <record id="sale_report_view_pivot" model="ir.ui.view">-->
+<!--             <field name="name">sale.report.pivot</field>-->
+<!--             <field name="model">sale.report</field>-->
+<!--             <field name="arch" type="xml">-->
+<!--                 <pivot string="Sales Analysis" disable_linking="True" display_quantity="true" sample="1">-->
+<!--                     <field name="categ_id" type="row"/>-->
+<!--                     <field name="order_id" type="measure"/>-->
+<!--                     <field name="price_subtotal" type="measure"/>-->
+<!--                     <field name="price_total" type="measure"/>-->
+<!--                 </pivot>-->
+<!--             </field>-->
+<!--        </record>-->
+
+
     </data>
 </odoo>
