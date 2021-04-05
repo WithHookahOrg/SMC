@@ -283,7 +283,7 @@
                                     </div>
                                     <div class="col-3  border-bottom">
                                         <p style="text-align:right; font-weight:bold;">
-                                            <t t-esc="o.discount_total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}" class="div_tb"/>
+                                            <t t-esc="o.line_discount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}" class="div_tb"/>
                                         </p>
                                     </div>
                                 </div>
@@ -295,7 +295,7 @@
                                     </div>
                                     <div class="col-3  border-bottom">
                                         <p style="text-align:right; font-size:15px; font-weight:bold;">
-                                            <t t-set="net_payable" t-value="(total_amount - o.discount_total)"/>
+                                            <t t-set="net_payable" t-value="(total_amount - o.total_discount)"/>
                                             <t t-esc="net_payable" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
                                         </p>
                                     </div>
@@ -318,11 +318,24 @@
                             <div class="container">
                                 <div class="row justify-content-end">
                                     <div class="col-3" style="font-size:15px;text-align:right;">
+                                        <p style="font-weight:bold;">Second Discount:</p>
+                                    </div>
+                                    <div class="col-3  border-bottom">
+                                        <p style="text-align:right; font-size:15px; font-weight:bold;">
+                                            <t t-esc="o.second_discount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="row justify-content-end">
+                                    <div class="col-3" style="font-size:15px;text-align:right;">
                                         <p style="font-weight:bold;">Balance:</p>
                                     </div>
                                     <div class="col-3  border-bottom">
                                         <p style="text-align:right; font-weight:bold;">
-                                            <t t-set="grand_total_balance" t-value="((total_amount - o.discount_total) + o.amount_tax)"/>
+                                            <t t-set="grand_total_balance" t-value="((total_amount - o.total_discount) + o.amount_tax)"/>
                                             <t t-esc="grand_total_balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
                                         </p>
                                     </div>
