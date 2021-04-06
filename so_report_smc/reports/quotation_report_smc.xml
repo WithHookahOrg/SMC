@@ -319,12 +319,12 @@
                                     </td>
                                 </tr>
 
-                                <tr width="100%">
-                                    <td width="70%" style="text-align:right; font-weight:bold;">Tax 17.0%:</td>
-                                    <td width="30%" style="padding-left:30px; border-bottom:1px solid black;text-align:right;">
-                                        <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
-                                    </td>
-                                </tr>
+<!--                                <tr width="100%">-->
+<!--                                    <td width="70%" style="text-align:right; font-weight:bold;">Tax 17.0%:</td>-->
+<!--                                    <td width="30%" style="padding-left:30px; border-bottom:1px solid black;text-align:right;">-->
+<!--                                        <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
                                 <tr width="100%">
                                     <td width="70%" style="text-align:right;"/>
                                     <td width="30%" style="padding-left:30px; border-bottom:1px solid black;">
