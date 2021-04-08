@@ -227,36 +227,56 @@ class ReportAccountHashIntegrity(models.AbstractModel):
         #for showroom expenses calculating accounts'type cash and bank' credit values
         # ajitem-----> account Journal items
         acc_data = []
+        acc_crd_list=[]
         for cr_accnts in cash_bank_acc:
             ajitem =self.env['account.move.line'].search(
                 [('account_id', '=', cr_accnts.id), ('date', '>=', date_from), ('date', '<=', date_to),
                  ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted')])
 
 
+            for crdit_record in ajitem:
+                cre_val=0.0
+                if crdit_record.credit:
+                    cre_val = crdit_record.credit
+                    cr_jv= crdit_record.move_id
+                    jornal_entry= self.env['account.move.line'].search([('date', '>=', date_from),
+                                                                        ('date', '<=', date_to),
+                                                                        ('branch_id.id', '=', selected_id),
+                                                                        ('move_id.state', '=', 'posted'),
+                                                                        ('move_id.id','=',cr_jv.id)])
 
-
-            for dt in ajitem:
-                val_updated = False
-
-                for acc in acc_data:
-                    ac_id= acc['acc_id']
-                    nm= acc['name']
-                    bal = acc['bal']
-                    if ac_id == dt.account_id.id:
-                        acount_total_bal =   self.calc_total_dbt_crd(dt,False)
-                        acc['bal'] = acc['bal']+acount_total_bal
-                        val_updated = True
-
-
-                else:
-                    if val_updated == False:
-                        acc_total_balance= self.calc_total_dbt_crd(dt,False)
-                        acc_data.append({
-                            'acc_id':dt.account_id.id,
-                            'name'  : dt.account_id.name,
-                            'bal'   : acc_total_balance
+                    rec_debt = jornal_entry.filtered(lambda r:r.debit == cre_val)
+                    if rec_debt.account_id.user_type_id.name != 'Payable' and rec_debt.account_id.user_type_id.name != 'Receivable':
+                        acc_crd_list.append({
+                              'name': rec_debt.account_id.name,
+                              'credit' : cre_val,
+                              'cred_acc': crdit_record.account_id.name,
+                              'partner':  crdit_record.partner_id.name
                         })
-
+    # all accounts(type 'cash and bank')'s credit vals [account wise combined]
+        #     for dt in ajitem:
+        #         val_updated = False
+        #
+        #         for acc in acc_data:
+        #             ac_id= acc['acc_id']
+        #             nm= acc['name']
+        #             bal = acc['bal']
+        #             if ac_id == dt.account_id.id:
+        #                 acount_total_bal =   self.calc_total_dbt_crd(dt,False)
+        #                 acc['bal'] = acc['bal']+acount_total_bal
+        #                 val_updated = True
+        #
+        #
+        #         else:
+        #             if val_updated == False:
+        #                 acc_total_balance= self.calc_total_dbt_crd(dt,False)
+        #                 acc_data.append({
+        #                     'acc_id':dt.account_id.id,
+        #                     'name'  : dt.account_id.name,
+        #                     'bal'   : acc_total_balance
+        #                 })
+    #end  all accounts(type 'cash and bank')'s credit vals [account wise combined]
+        # # for showroom expenses calculating accounts'type cash and bank' credit values
 
         # name = account_line[]
         for i in account_move_line.line_ids:
@@ -336,7 +356,110 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 "partner_type": customer.partner_type,
                 'branch_id': customer.branch_id.id
             })
+        # for purchase column
+        purchases_list=[]
+        # cash_bank_acc = self.env['account.account'].search([('user_type_id.name', '=', 'Bank and Cash')])
+        # payable_acc = self.env['account.account'].search([('user_type_id.name', '=', 'Payable')])
+        for pay_acc in cash_bank_acc:
+            jr_item_rcs = self.env['account.move.line'].search([('account_id', '=', pay_acc.id),
+                                                                ('date', '>=', date_from),
+                                                                ('date', '<=', date_to),
+                                                                ('branch_id.id', '=', selected_id),
+                                                                ('move_id.state', '=', 'posted')])
+            for j_rec in jr_item_rcs:
+                credt_val = 0.0
+                partner_name=''
+                if j_rec.credit:
+                    credt_val = j_rec.credit
+                    if j_rec.partner_id:
+                        partner_name = j_rec.partner_id.name
 
+                    cr_jv = j_rec.move_id
+                    jornal_entry = self.env['account.move.line'].search([('date', '>=', date_from),
+                                                                         ('date', '<=', date_to),
+                                                                         ('branch_id.id', '=', selected_id),
+                                                                         ('move_id.state', '=', 'posted'),
+                                                                         ('move_id.id', '=', cr_jv.id)])
+
+                    rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
+                    if rec_debt[0].account_id.user_type_id.name == 'Payable':
+
+                        purchases_list.append({
+                            'cre_acc':j_rec.account_id.name,
+                            'partnr': partner_name,
+                            'credit':credt_val,
+                            'debit_acc':rec_debt.account_id.name
+                        })
+
+        # for sale column
+        sale_return_list=[]
+        # receiv_acc = self.env['account.account'].search([('user_type_id.name', '=', 'Receivable')])
+        for recv_acc in cash_bank_acc:
+            jr_item_rcs = self.env['account.move.line'].search([('account_id', '=', recv_acc.id),
+                                                                ('date', '>=', date_from),
+                                                                ('date', '<=', date_to),
+                                                                ('branch_id.id', '=', selected_id),
+                                                                ('move_id.state', '=', 'posted')])
+            for j_rec in jr_item_rcs:
+                credt_val = 0.0
+                partner_name = ''
+                if j_rec.credit:
+                    credt_val = j_rec.credit
+                    if j_rec.partner_id:
+                        partner_name = j_rec.partner_id.name
+
+                    cr_jv = j_rec.move_id
+                    jornal_entry = self.env['account.move.line'].search([('date', '>=', date_from),
+                                                                         ('date', '<=', date_to),
+                                                                         ('branch_id.id', '=', selected_id),
+                                                                         ('move_id.state', '=', 'posted'),
+                                                                         ('move_id.id', '=', cr_jv.id)])
+
+                    rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
+                    if rec_debt[0].account_id.user_type_id.name == 'Receivable':
+
+
+
+                        sale_return_list.append({
+                            'cre_acc': j_rec.account_id.name,
+                            'partnr': partner_name,
+                            'credit': credt_val,
+                            'debit_acc': rec_debt.account_id.name
+                        })
+
+        # for Online Payments & Cross Cheques
+        cheq_payment_list=[]
+        for accnt in cash_bank_acc:
+            jr_item_rcs = self.env['account.move.line'].search([('account_id', '=', accnt.id),
+                                                                ('date', '>=', date_from),
+                                                                ('date', '<=', date_to),
+                                                                ('branch_id.id', '=', selected_id),
+                                                                ('move_id.state', '=', 'posted')])
+            for j_rec in jr_item_rcs:
+                credt_val = 0.0
+                partner_name = ''
+                if j_rec.credit:
+                    credt_val = j_rec.credit
+                    if j_rec.partner_id:
+                        partner_name = j_rec.partner_id.name
+
+                    cr_jv = j_rec.move_id
+                    jornal_entry = self.env['account.move.line'].search([('date', '>=', date_from),
+                                                                         ('date', '<=', date_to),
+                                                                         ('branch_id.id', '=', selected_id),
+                                                                         ('move_id.state', '=', 'posted'),
+                                                                         ('move_id.id', '=', cr_jv.id)])
+
+                    rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
+                    if rec_debt[0].account_id.user_type_id.name == 'Cash And Bank':
+                        cheq_payment_list.append({
+                            'cre_acc': j_rec.account_id.name,
+                            'partnr': partner_name,
+                            'credit': credt_val,
+                            'debit_acc': rec_debt.account_id.name
+                        })
+
+        # end for Online Payments & Cross Cheques
         customer_list = []
         for customer in customer_type:
             customer_list.append({
@@ -383,12 +506,16 @@ class ReportAccountHashIntegrity(models.AbstractModel):
             'customer_method_list': customer_method_list,
             'account_line': account_line,
             'out_refund_list': out_refund_list,
-            'acc_total_list':acc_data,
+            # 'acc_total_list':acc_data,
             'fivth_notes' :five_th_notes,
             'oneth_note' :one_th_notes,
             'five_hndrd' : five_hndrd_notes,
             'all_acc_ob':all_acc_open_bal,
-            'acc_debits':acc_wise_bal_lst
+            'acc_debits':acc_wise_bal_lst,
+            'acc_credits':acc_crd_list,
+            'purchase_data':purchases_list,
+            'sale_return_data':sale_return_list,
+            'cheq_payment':cheq_payment_list
 
         }
 # class pivotSaleReportorder(models.Model):
