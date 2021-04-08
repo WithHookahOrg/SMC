@@ -382,7 +382,7 @@
                                             <table width="99.8%">
                                                 <tbody>
 
-                                                    <t t-foreach="cheq_payment_list" t-as="val1">
+                                                    <t t-foreach="cheq_payment" t-as="val1">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
                                                                 <span>&#160;</span>
@@ -402,7 +402,7 @@
                                             <table width="99.8%" >
                                                 <tbody>
                                                     <t t-set="total_expense" t-value="0"/>
-                                                    <t t-foreach="cheq_payment_list" t-as="val2">
+                                                    <t t-foreach="cheq_payment" t-as="val2">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
                                                                 <span t-esc="val2['cre_acc']"/>
@@ -411,7 +411,7 @@
                                                                 <span t-esc="val2['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_expense" t-value="(total_expense + val2['amount'])"/>
+                                                        <t t-set="total_expense" t-value="(total_expense + val2['credit'])"/>
                                                     </t>
                                                 </tbody>
                                             </table>
@@ -547,7 +547,7 @@
                                         <!--corrected closing bal -->
                                         <t t-set="closing_bal" t-value="((total_receipt + all_acc_ob) - (total_expense+total_purchase+total_debit+total_sale_return))"/>
 <!--                                        <t t-esc="closing_balance"/>-->
-                                        <t t-esc="closing_bal"/>
+                                        <t t-esc="round(closing_bal,2)"/>
                                     </div>
                                 </div>
 

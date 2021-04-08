@@ -451,7 +451,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                          ('move_id.id', '=', cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
-                    if rec_debt[0].account_id.user_type_id.name == 'Cash And Bank':
+                    if rec_debt[0].account_id.user_type_id.name == 'Bank and Cash':
                         cheq_payment_list.append({
                             'cre_acc': j_rec.account_id.name,
                             'partnr': partner_name,
