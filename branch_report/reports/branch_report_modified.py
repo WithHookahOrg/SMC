@@ -219,10 +219,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                             'debit': dbt
                         })
 
-
-
-
-
+        acc_wise_bal_lst =[i for i in acc_wise_bal_lst if not (i['debit'] == 0.0)]
 
         #for showroom expenses calculating accounts'type cash and bank' credit values
         # ajitem-----> account Journal items
