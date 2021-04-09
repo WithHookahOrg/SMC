@@ -243,7 +243,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                         ('move_id.id','=',cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r:r.debit == cre_val)
-                    if rec_debt.account_id.user_type_id.name != 'Payable' and rec_debt.account_id.user_type_id.name != 'Receivable':
+                    if rec_debt.account_id.user_type_id.name != 'Payable' and rec_debt.account_id.user_type_id.name != 'Receivable' and rec_debt.account_id.user_type_id.name != 'Current Liabilities':
                         acc_crd_list.append({
                               'name': rec_debt.account_id.name,
                               'credit' : cre_val,
