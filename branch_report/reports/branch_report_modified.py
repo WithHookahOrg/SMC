@@ -243,7 +243,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                         ('move_id.id','=',cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r:r.debit == cre_val)
-                    if rec_debt.account_id.user_type_id.name != 'Payable' and rec_debt.account_id.user_type_id.name != 'Receivable' and rec_debt.account_id.user_type_id.name != 'Current Liabilities':
+                    # if rec_debt.account_id.user_type_id.name != 'Payable' and rec_debt.account_id.user_type_id.name != 'Receivable':
+                    if rec_debt.account_id.user_type_id.name == 'Expenses':
                         acc_crd_list.append({
                               'name': rec_debt.account_id.name,
                               'credit' : cre_val,
@@ -379,14 +380,15 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                          ('move_id.id', '=', cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
-                    if rec_debt[0].account_id.user_type_id.name == 'Payable':
+                    if rec_debt:
+                        if rec_debt[0].account_id.user_type_id.name == 'Payable':
 
-                        purchases_list.append({
-                            'cre_acc':j_rec.account_id.name,
-                            'partnr': partner_name,
-                            'credit':credt_val,
-                            'debit_acc':rec_debt.account_id.name
-                        })
+                            purchases_list.append({
+                                'cre_acc':j_rec.account_id.name,
+                                'partnr': partner_name,
+                                'credit':credt_val,
+                                'debit_acc':rec_debt.account_id.name
+                            })
 
         # for sale column
         sale_return_list=[]
@@ -413,16 +415,17 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                          ('move_id.id', '=', cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
-                    if rec_debt[0].account_id.user_type_id.name == 'Receivable':
+                    if rec_debt:
+                        if rec_debt[0].account_id.user_type_id.name == 'Receivable':
 
 
 
-                        sale_return_list.append({
-                            'cre_acc': j_rec.account_id.name,
-                            'partnr': partner_name,
-                            'credit': credt_val,
-                            'debit_acc': rec_debt.account_id.name
-                        })
+                            sale_return_list.append({
+                                'cre_acc': j_rec.account_id.name,
+                                'partnr': partner_name,
+                                'credit': credt_val,
+                                'debit_acc': rec_debt.account_id.name
+                            })
 
         # for Online Payments & Cross Cheques
         cheq_payment_list=[]
@@ -443,18 +446,19 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     cr_jv = j_rec.move_id
                     jornal_entry = self.env['account.move.line'].search([('date', '>=', date_from),
                                                                          ('date', '<=', date_to),
-                                                                         ('branch_id.id', '=', selected_id),
+                                                                         # ('branch_id.id', '=', selected_id),
                                                                          ('move_id.state', '=', 'posted'),
                                                                          ('move_id.id', '=', cr_jv.id)])
 
                     rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
-                    if rec_debt[0].account_id.user_type_id.name == 'Current Liabilities':
-                        cheq_payment_list.append({
-                            'cre_acc': j_rec.account_id.name,
-                            'partnr': partner_name,
-                            'credit': credt_val,
-                            'debit_acc': rec_debt.account_id.name
-                        })
+                    if rec_debt:
+                        if rec_debt[0].account_id.user_type_id.name == 'Bank and Cash':
+                            cheq_payment_list.append({
+                                'cre_acc': j_rec.account_id.name,
+                                'partnr': partner_name,
+                                'credit': credt_val,
+                                'debit_acc': rec_debt.account_id.name
+                            })
 
         # end for Online Payments & Cross Cheques
         customer_list = []

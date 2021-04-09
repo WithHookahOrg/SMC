@@ -163,12 +163,12 @@
                                             <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_receipt" t-value="0"/>
-                                                    <!--                                                    <t t-foreach="customer_list" t-as="val">-->
-                                                    <!--                                                        <tr>-->
-                                                    <!--                                                            <td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">-->
-                                                    <!--                                                                <span t-esc="val['partner_id']"/>(<span t-esc="val['journal_name']"/>)-->
-                                                    <!--                                                            </td>-->
-                                                    <!--                                                            <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">-->
+                                                    <!--  <t t-foreach="customer_list" t-as="val">-->
+                                                    <!--<tr>-->
+                                                    <!--<td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">-->
+                                                    <!-- <span t-esc="val['partner_id']"/>(<span t-esc="val['journal_name']"/>)-->
+                                                    <!-- </td>-->
+                                                    <!-- <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">-->
                                                     <!--                                                                <span t-esc="val['amount']"/>-->
                                                     <!--                                                            </td>-->
 
@@ -339,19 +339,19 @@
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" width="90%">
                                 </div>
                             </div>
-                            <table width="100%" style="margin-left:-15px;">
+                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;"  cellspacing="0">
                                 <tbody>
                                     <tr>
                                         <!--<td width="50%">-->
 
                                         <!--</td>-->
                                         <td width="49%">
-                                            <table width="99.8%">
+                                            <table width="99.8%"  style="user-select:none; -moz-user-select:none; border-collapse:collapse;"  cellspacing="0">
                                                 <tbody>
                                                     <t t-set="total_purchase" t-value="0"/>
                                                     <t t-foreach="purchase_data" t-as="val1">
-                                                        <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; ">
+                                                        <tr style="user-select:none;  -moz-user-select:none;">
+                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; user-select:none;  -moz-user-select:none;">
                                                                 (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
@@ -369,13 +369,13 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%">
+                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
                                                 <tbody>
                                                     <t t-set="total_purchase" t-value="0"/>
                                                     <!--                                                    <t t-foreach="customer_vendor_list" t-as="val1">-->
                                                     <t t-foreach="purchase_data" t-as="val1">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
@@ -434,7 +434,7 @@
 
                                                     <t t-foreach="cheq_payment" t-as="val1">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; color:white;">
+                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">
 
                                                                 <span t-esc="val1['cre_acc']"/>
 
@@ -456,7 +456,7 @@
                                                     <t t-set="total_expense" t-value="0"/>
                                                     <t t-foreach="cheq_payment" t-as="val2">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 <span t-esc="val2['cre_acc']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
@@ -541,7 +541,7 @@
                                                     <!--                                                    <t t-foreach="out_refund_list" t-as="val4">-->
                                                     <t t-foreach="sale_return_data" t-as="val4">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 <span t-esc="val4['partnr']"/> &#160;[<span t-esc="val4['cre_acc']"/>]
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">

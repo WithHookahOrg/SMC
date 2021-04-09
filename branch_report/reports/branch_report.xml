@@ -1,5 +1,17 @@
 <odoo>
     <data>
+<!--        <template id="sti_report_header" inherit_id="web.external_layout_standard">-->
+<!--               <xpath expr="//div[@class='footer']" position="replace">-->
+
+<!--               </xpath>-->
+<!--        </template>-->
+
+
+
+
+
+
+
           <record id="paperformat_branch_report" model="report.paperformat">
             <field name="name">European A4 for branch Report</field>
             <field name="default" eval="False" />
