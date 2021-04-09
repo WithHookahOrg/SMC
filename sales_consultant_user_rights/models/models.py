@@ -14,7 +14,7 @@ class ResPartnerInh(models.Model):
     @api.onchange('user_id')
     def onchange_partner_id(self):
         for rec in self:
-            partner = self.env['res.partner'].search([('name', '=', rec.user_id.name)])
+            partner = self.env['res.partner'].search([('name', '=', rec.user_id.name)],limit=1)
             rec.partner_id = partner.id
 
 
