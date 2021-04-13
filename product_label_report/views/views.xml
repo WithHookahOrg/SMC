@@ -39,7 +39,7 @@
                             <td class="text-left" style="height: 0.1rem;border:1px solid black; border-right:none;">
                                 <div name="left-upper-side"
                                      style="margin-left:-12px; margin-right:10px; padding-right:10px;" class="col-1">
-                                    <img src="/product_label_report/static/logo.jpeg"
+                                    <img src="/product_label_report/static/logo.jpg"
                                          style="max-height: 50px; padding-left:-5px; margin-left:-6px;"
                                          class="float-left" alt="Logo"/>
 <!--                                    t-att-src="image_data_uri(res_company.logo)"-->
