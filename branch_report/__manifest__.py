@@ -24,7 +24,8 @@
 
     # always loaded
     'data': [
-        'reports/branch_report_template.xml',
+        #'reports/branch_report_template.xml',
+        'reports/smc_branch_report.xml',
         'wizard/branch_report.xml',
         'security/ir.model.access.csv',
         'views/views.xml',

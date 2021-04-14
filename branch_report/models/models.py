@@ -11,7 +11,8 @@ class BrachReport(models.Model):
     one_th = fields.Integer(string="1000 x")
     five_hundred = fields.Integer(string='500 x')
     currency_note = fields.Boolean(string="Note", default= False)
-
+    cheques_payment = fields.Boolean(string="Checks", default= False)
+    online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
 
     @api.onchange('partner_id')
     def curr_note_check(self):

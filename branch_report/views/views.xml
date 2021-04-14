@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="account.view_account_payment_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
-                    <button name="%(branch_report.create_branch_report_wizard)d" string="Branch Report" type="action" class="oe_highlight"/>
+<!--                    <button name="%(branch_report.create_branch_report_wizard)d" string="Branch Report" type="action" class="oe_highlight"/>-->
                 </xpath>
 
 
@@ -17,6 +17,13 @@
                     <field name="one_th"   attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('currency_note','=',False)]}"/>
                     <field name="five_hundred"   attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('currency_note','=',False)]}"/>
                 </xpath>
+
+
+                <xpath expr="//form/sheet/group/group[@name='group2']/field[@name='partner_bank_id']" position="after">
+                     <field name="cheques_payment" />
+                     <field name="online_credit_payment"/>
+                </xpath>
+
             </field>
         </record>
 

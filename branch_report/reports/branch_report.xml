@@ -1,5 +1,39 @@
 <odoo>
     <data>
+
+<!--         <record id="account_payment_method_credit_card_electronic" model="account.payment.method">-->
+<!--            <field name="name">Credit Card</field>-->
+<!--            <field name="code">credit_card_payments</field>-->
+<!--            <field name="payment_type">outbound</field>-->
+<!--            <field name="sequence">22</field>-->
+<!--        </record>-->
+          <!--field credit card on journal entry form-->
+        <record id="view_move_form_inherit_branch_credit_card" model="ir.ui.view">
+            <field name="name">view.move.form.inherit.branch.credit_card_chk</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='payment_reference']" position="after">
+                    <!-- Add your fields or attributes here -->
+                        <field name="cred_card_check"/>
+<!--                        <field name="credit_card_check"/>-->
+                </xpath>
+
+            </field>
+        </record>
+
+<!--        <record id="payment.account_payment_method_electronic_in" model="account.payment.method">-->
+<!--            <field name="name">Electronic</field>-->
+<!--            <field name="code">electronic</field>-->
+<!--            <field name="payment_type">inbound</field>-->
+<!--       </record>-->
+
+
+<!--          <record id="account_payment_method_electronic_in2" model="account.payment.method">-->
+<!--            <field name="name">Electronicaaa</field>-->
+<!--            <field name="code">electronicaa</field>-->
+<!--            <field name="payment_type">inbound</field>-->
+<!--       </record>-->
 <!--        <template id="sti_report_header" inherit_id="web.external_layout_standard">-->
 <!--               <xpath expr="//div[@class='footer']" position="replace">-->
 
