@@ -214,7 +214,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                         # 'acc_partner_name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + cb_acnt.name + ']',
                                         'acc_name': cb_acnt.name,
                                         'debit': dbt,
-                                        'cred_acnt':cred_acnt.account_id.name
+                                        'cred_acnt':cred_acnt.account_id.name,
+                                        'partner_journal':(rec.partner_id.name if rec.partner_id.name else "") + '['+rec.journal_id.name+']'
                                     })
 
 
@@ -740,6 +741,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
 
             'credit_check': self.get_credit_cheques_accounts,
             'credit_online': self.get_credit_online_accounts,
+
         }
 
     def get_credit_online_accounts(self):
