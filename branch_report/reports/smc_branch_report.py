@@ -757,7 +757,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
         for rec in journal_items:
             if rec.account_id.user_type_id.name == 'Bank and Cash':
 
-                creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0)])
+                creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0),('branch', '=', rec_model.branch.id)])
                 paymentobj = self.env['account.payment'].search(
                     [('move_id', '=', rec.move_id.id), ('online_credit_payment', '=', True)])
                 if paymentobj.branch_id.id == rec_model.branch.id:
@@ -781,7 +781,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
         for rec in journal_items:
             if rec.account_id.user_type_id.name == 'Bank and Cash':
 
-                creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0)])
+                creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0), ('branch', '=', rec_model.branch.id)])
                 paymentobj = self.env['account.payment'].search(
                     [('move_id', '=', rec.move_id.id), ('cheques_payment', '=', True)])
                 if paymentobj.branch_id.id == rec_model.branch.id:
