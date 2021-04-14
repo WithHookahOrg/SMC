@@ -760,7 +760,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0)])
                 paymentobj = self.env['account.payment'].search(
                     [('move_id', '=', rec.move_id.id), ('online_credit_payment', '=', True)])
-                if paymentobj:
+                if paymentobj.branch_id ==:
                     print(creditobj.name)
                     account_list.append({
                         'name': str(creditobj.account_id.name) + ' ' + str(creditobj.partner_id.name),
@@ -784,7 +784,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0)])
                 paymentobj = self.env['account.payment'].search(
                     [('move_id', '=', rec.move_id.id), ('cheques_payment', '=', True)])
-                if paymentobj:
+                if paymentobj.branch_id.id == rec_model.branch.id:
                     print(creditobj.name)
                     account_list.append({
                         'name': str(creditobj.account_id.name) + ' ' + str(creditobj.partner_id.name),
