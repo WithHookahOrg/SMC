@@ -20,14 +20,70 @@ from odoo import models, fields, api
 #     def _value_pc(self):
 #         for record in self:
 #             record.value2 = float(record.value) / 100
+
+class product_product_inherit_stock(models.Model):
+    _inherit="product.product"
+
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+
+    def cal_available_qty(self):
+        for rec in self:
+            total = 0
+            print(rec.id)
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            print(quants)
+            for line in quants:
+                if line.available_quantity > 0:
+                    total = total + line.available_quantity
+            print(total)
+            rec.available_qty = total
+
+    def calc_reserve(self):
+        for rec in self:
+            prd_resrv_qty=0.0
+            # reserve_stk_move=self.env['stock.move'].search([('product_tmpl_id','=',rec.id),('picking_id.state','=','assigned')])
+            reserve_stk_move = self.env['stock.picking'].search([('state','=','assigned'),('product_id.product_tmpl_id','=',rec.id),('picking_type_id.code', '=', 'outgoing')])
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            # quants=self.env['stock.quant']._gather(ol.product_id.product_tmpl_id, ol.location_id)
+            for rsrvqt in quants:
+                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+
+            #prd_rsrv=reserve_stk_move.move_ids_without_package.filtered(lambda r: r.product_id.product_tmpl_id == rec)
+            # for rec1 in reserve_stk_move:
+            #     for ol in rec1.move_ids_without_package:
+            #         if ol.product_id.product_tmpl_id == rec:
+            #             quants= self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            #             # quants=self.env['stock.quant']._gather(ol.product_id.product_tmpl_id, ol.location_id)
+            #             for rsrvqt in quants:
+            #                 prd_resrv_qty= prd_resrv_qty + rsrvqt.reserved_quantity
+            #
+            #     # self.env['stock.quant']._gather(ol.product_id.product_tmpl_id, locat)
+            #     # for ol in rec1.move_ids
+            #             #prd_resrv_qty= prd_resrv_qty+ol.forecast_availability
+
+            rec.reserved_qty=prd_resrv_qty
+
 class product_templ_inherit_stock(models.Model):
     _inherit="product.template"
 
-    stock_id= fields.Many2one('stock.quant',string="stock_id", )
-    reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve")
+    stock_id = fields.Many2one('stock.quant', string="stock_id", )
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
     reserved_qty1 = fields.Float(string="reserved quantss", related="stock_id.reserved_quantity")
-    
-    
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+
+    def cal_available_qty(self):
+        for rec in self:
+            total = 0
+            print(rec.id)
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            print(quants)
+            for line in quants:
+                if line.available_quantity > 0:
+                    total = total + line.available_quantity
+            print(total)
+            rec.available_qty = total
+
     def calc_reserve(self):
         for rec in self:
             prd_resrv_qty=0.0
