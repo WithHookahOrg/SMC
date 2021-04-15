@@ -39,7 +39,7 @@
                             <td class="text-left" style="height: 0.1rem;border:1px solid black; border-right:none;">
                                 <div name="left-upper-side"
                                      style="margin-left:-12px; margin-right:10px; padding-right:10px;" class="col-1">
-                                    <img src="/product_label_report/static/logo.jpg"
+                                    <img src="/product_label_report/static/logo.jpeg"
                                          style="max-height: 50px; padding-left:-5px; margin-left:-6px;"
                                          class="float-left" alt="Logo"/>
 <!--                                    t-att-src="image_data_uri(res_company.logo)"-->
@@ -157,7 +157,7 @@
                             </td>
                         </tr>
 
-                        <tr style=" border:1px solid black; font-size:11px; white-space: nowrap;">
+                        <tr style=" border:1px solid black; font-size:13px; white-space: nowrap;">
                             <td style=" border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px;padding-left:1px; ">
                                 <div style="display:inline-block; ">
                                     <strong>Price:</strong>
@@ -165,7 +165,7 @@
 
                             </td>
 
-                            <td style="border:1px solid black; border-right:none;  padding:0px; margin:0px; text-align:left; ">
+                            <td style="border:1px solid black; border-right:none;padding:0px; margin:0px; text-align:left; ">
                                 <!--                              <div style="display:inline-block;"> <span t-esc="product.uom_id.name"/></div>-->
                                 <div style="display:inline-block;padding-left:2px;">
                                     <span>Per PCS</span>
