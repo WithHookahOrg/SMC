@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "smc_project",
+    'name': "SMC Project(Discount Approval,Sale Discontinue)",
 
-    'summary': """Customize some fields in product template
+    'summary': """
+    Discount 
    """,
 
     'description': """
@@ -24,9 +25,9 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'security/groups.xml',
+        # 'security/groups.xml',
         'views/views.xml',
-        'views/templates.xml',
+        # 'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
