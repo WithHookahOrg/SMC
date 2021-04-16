@@ -34,7 +34,7 @@ class product_product_inherit_stock(models.Model):
             quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
             print(quants)
             for line in quants:
-                if line.available_quantity > 0:
+                if line.available_quantity > 0 and line.location_id.usage != 'customer':
                     total = total + line.available_quantity
             print(total)
             rec.available_qty = total
@@ -64,6 +64,7 @@ class product_product_inherit_stock(models.Model):
 
             rec.reserved_qty=prd_resrv_qty
 
+
 class product_templ_inherit_stock(models.Model):
     _inherit="product.template"
 
@@ -75,18 +76,25 @@ class product_templ_inherit_stock(models.Model):
     def cal_available_qty(self):
         for rec in self:
             total = 0
-            print(rec.id)
-            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
-            print(quants)
+            # quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            quants = self.get_quant_lines()
+            quants = self.env['stock.quant'].browse(quants)
             for line in quants:
-                if line.available_quantity > 0:
+                # print(line.on_hand)
+                # if line.on_hand:
+                if line.product_tmpl_id.id == rec.id:
                     total = total + line.available_quantity
-            print(total)
             rec.available_qty = total
+
+    def get_quant_lines(self):
+        domain_loc = self.env['product.product']._get_domain_locations()[0]
+        quant_ids = [l['id'] for l in self.env['stock.quant'].search_read(domain_loc, ['id'])]
+        return quant_ids
+        # print(quant_ids)
 
     def calc_reserve(self):
         for rec in self:
-            prd_resrv_qty=0.0
+            prd_resrv_qty = 0.0
             # reserve_stk_move=self.env['stock.move'].search([('product_tmpl_id','=',rec.id),('picking_id.state','=','assigned')])
             reserve_stk_move = self.env['stock.picking'].search([('state','=','assigned'),('product_id.product_tmpl_id','=',rec.id),('picking_type_id.code', '=', 'outgoing')])
             quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
