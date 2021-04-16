@@ -111,24 +111,33 @@ class StockPicking(models.Model):
 
     shipping_address = fields.Char(string='Shipping Address')
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
-    sale_origin = fields.Many2one('sale.order', compute='_compute_sale_origin')
-    purchase_origin = fields.Many2one('purchase.order', compute='_compute_purchase_origin')
+    # sale_origin = fields.Many2one('sale.order', compute='_compute_sale_origin')
+    # purchase_origin = fields.Many2one('purchase.order', compute='_compute_purchase_origin')
     invoice_origin = fields.Many2one('account.move', compute='_compute_invoice_origin')
+    show_origin = fields.Boolean('Show Origin', compute='compute_show_origin')
 
-    def _compute_purchase_origin(self):
-        for i in self:
-            record = self.env['purchase.order'].search([('name', '=', i.origin)], limit=1)
-            i.purchase_origin = record.id
+    def compute_show_origin(self):
+        for rec in self:
+            if rec.purchase_id:
+                rec.show_origin = True
+            elif rec.sale_id:
+                rec.show_origin = False
+            else:
+                rec.show_origin = False
+    # def _compute_purchase_origin(self):
+    #     for i in self:
+    #         record = self.env['purchase.order'].search([('name', '=', i.origin)], limit=1)
+    #         i.purchase_origin = record.id
 
     def _compute_invoice_origin(self):
         for i in self:
             record = self.env['account.move'].search([('invoice_origin', '=', i.origin)], limit=1)
             i.invoice_origin = record.id
 
-    def _compute_sale_origin(self):
-        for i in self:
-            record = self.env['sale.order'].search([('name', '=', i.origin)], limit=1)
-            i.sale_origin = record.id
+    # def _compute_sale_origin(self):
+    #     for i in self:
+    #         record = self.env['sale.order'].search([('name', '=', i.origin)], limit=1)
+    #         i.sale_origin = record.id
 
     def compute_self_id(self):
         for i in self:
