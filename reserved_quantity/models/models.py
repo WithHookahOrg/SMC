@@ -142,6 +142,26 @@ class product_product_inherit_stock(models.Model):
     _inherit="product.product"
 
     reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve")
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+
+    def cal_available_qty(self):
+        for rec in self:
+            total = 0
+            # quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            quants = self.get_quant_lines()
+            quants = self.env['stock.quant'].browse(quants)
+            for line in quants:
+                # print(line.on_hand)
+                # if line.on_hand:
+                if line.product_id.id == rec.id:
+                    total = total + line.available_quantity
+            rec.available_qty = total
+
+    def get_quant_lines(self):
+        domain_loc = self.env['product.product']._get_domain_locations()[0]
+        quant_ids = [l['id'] for l in self.env['stock.quant'].search_read(domain_loc, ['id'])]
+        return quant_ids
+        # print(quant_ids)
 
     def calc_reserve(self):
         for rec in self:
