@@ -6,6 +6,10 @@ import datetime
 from datetime import datetime, timedelta
 
 
+
+
+
+
 class ReportAccountHashIntegrity(models.AbstractModel):
     _name = 'report.branch_report.branch_report_id'
     _description = 'Get hash integrity result as PDF.'

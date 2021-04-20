@@ -11,8 +11,58 @@ class BrachReport(models.Model):
     one_th = fields.Integer(string="1000 x")
     five_hundred = fields.Integer(string='500 x')
     currency_note = fields.Boolean(string="Note", default= False)
-    cheques_payment = fields.Boolean(string="Checks", default= False)
+    cheques_payment = fields.Boolean(string="Cheque", default= False)
     online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
+    corporate_sale = fields.Boolean(string="Corporate sale", default=False)
+    other_receipt = fields.Boolean(string="Other Receipts", default=False)
+    type = fields.Selection(related='journal_id.type')
+
+    @api.onchange('cheques_payment')
+    def onchange_cheque_only(self):
+        if self.cheques_payment:
+            if self.journal_id.type == 'cash':
+                self.online_credit_payment = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.corporate_sale = False
+                self.online_credit_payment = False
+
+    @api.onchange('online_credit_payment')
+    def onchange_creditCard_only(self):
+        if self.online_credit_payment:
+            if self.journal_id.type == 'cash':
+                self.cheques_payment = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.cheques_payment = False
+                self.corporate_sale = False
+
+    @api.onchange('corporate_sale')
+    def corporate_only(self):
+        if self.corporate_sale:
+            if self.journal_id.type == 'cash':
+                self.other_receipt = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.cheques_payment = False
+                self.online_credit_payment = False
+
+    @api.onchange('other_receipt')
+    def otherReceipt_only(self):
+        if self.other_receipt:
+            if self.journal_id.type == 'cash':
+                self.corporate_sale = False
+            if self.journal_id.type == 'bank':
+                self.corporate_sale = False
+                self.cheques_payment = False
+                self.online_credit_payment = False
+
+
+
+
+
+
+
 
     @api.onchange('partner_id')
     def curr_note_check(self):
@@ -21,6 +71,16 @@ class BrachReport(models.Model):
                 self.currency_note = True
             elif self.partner_id.ceo_currency_check == False:
                self.currency_note = False
+
+    @api.onchange('cheques_payment')
+    def cheque_only(self):
+        if self.cheques_payment:
+            self.online_credit_payment = False
+
+    @api.onchange('online_credit_payment')
+    def creditCard_only(self):
+        if self.online_credit_payment:
+            self.cheques_payment = False
 
 
 

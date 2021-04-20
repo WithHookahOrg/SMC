@@ -20,8 +20,12 @@
 
 
                 <xpath expr="//form/sheet/group/group[@name='group2']/field[@name='partner_bank_id']" position="after">
-                     <field name="cheques_payment" />
-                     <field name="online_credit_payment"/>
+                    <field name="type"  invisible="1"/>
+                     <field name="cheques_payment" attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('type', '=', 'cash')]}"/>
+                     <field name="online_credit_payment"  attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('type', '=', 'cash')]}"/>
+                     <field name="corporate_sale" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                     <field name="other_receipt" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
                 </xpath>
 
             </field>
