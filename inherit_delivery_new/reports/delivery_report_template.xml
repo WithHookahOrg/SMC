@@ -44,9 +44,9 @@
                             <table width="100%">
                                 <thead>
                                     <tr>
-                                        <td width="5%" class="top_general_head">D.O.NO</td>
-                                        <td width="10%">:
-                                            <span t-field="o.name"/>
+                                        <td width="5%" class="top_general_head"/>
+                                        <td width="10%">
+<!--                                            <span t-field="o.name"/>-->
                                         </td>
                                         <td width="70%" style="padding-right:40px;" class="text-right">
                                             <span class="top_general_head" style="padding-right:10px;">Branch:</span>
@@ -57,55 +57,78 @@
 
                                     </tr>
                                     <tr>
-                                        <td width="2%" class="top_general_head">D.O.Date</td>
-                                        <td width="20%">:
-                                            <span t-field="o.scheduled_date"/>
+                                        <td width="5%" class="top_general_head">D.O.NO</td>
+                                        <td width="10%">:
+                                            <span t-field="o.name"/>
                                         </td>
                                         <td width="70%" style="padding-right:40px;" class="text-right">
-                                            <span class="top_general_head" style="padding-right:10px;">Address:</span>
+                                            <span class="top_general_head" style="padding-right:10px;">D.O.Date:</span>
                                             :
-                                            <span t-field="o.create_user.branch_id.address"/>
+                                           <span t-field="o.scheduled_date"/>
+
                                         </td>
 
                                     </tr>
                                     <tr>
-                                        <td width="2%" class="top_general_head">Agent</td>
-                                        <td width="20%">: <span t-field="o.current_user"/></td>
-                                         <td width="70%" style="padding-right:40px;" class="text-right">
-                                            <span class="top_general_head" style="padding-right:10px;">Tel:</span>
-                                            :
-                                            <span t-field="o.create_user.branch_id.telephone"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="2%" class="top_general_head">Customer</td>
+                                        <td width="10%" class="top_general_head">Customer Name</td>
                                         <td width="20%">:
                                             <span t-field="o.partner_id.name"/>
                                         </td>
-                                    </tr>
-                                       <tr>
-                                        <td width="2%" class="top_general_head">Mobile</td>
-                                        <td width="20%">:
+                                        <td width="70%" style="padding-right:40px;" class="text-right">
+                                            <span class="top_general_head" style="padding-right:10px;">Mobile:</span>
+                                            :
                                             <span t-field="o.partner_id.mobile"/>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="2%" class="top_general_head">Shipping Address</td>
-                                        <td width="20%">:
-                                            <span t-field="o.shipping_address"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="2%" class="top_general_head">Note</td>
-                                        <td width="20%">:
-                                            <span t-field="o.state"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="15%" class="top_general_head">Godown</td>
-                                        <td width="15%">: <span t-field="o.location_id"/> </td>
 
                                     </tr>
+                                    <tr>
+                                        <td width="2%" class="top_general_head">Address</td>
+                                        <td width="90%">: <span t-field="o.create_user.branch_id.address"/></td>
+<!--                                         <td width="70%" style="padding-right:40px;" class="text-right">-->
+<!--                                            <span class="top_general_head" style="padding-right:10px;">Tel:</span>-->
+<!--                                            :-->
+<!--                                            <span t-field="o.create_user.branch_id.telephone"/>-->
+<!--                                        </td>-->
+                                    </tr>
+                                    <tr>
+                                        <td width="2%" class="top_general_head">Agent Name</td>
+                                        <td width="20%">:
+                                            <span t-field="o.current_user"/>
+                                        </td>
+                                        <td width="70%" style="padding-right:40px;" class="text-right">
+                                            <span class="top_general_head" style="padding-right:10px;">note:</span>
+                                            :
+                                            <span t-field="o.note"/>
+                                        </td>
+                                    </tr>
+                                       <tr>
+                                        <td width="2%" class="top_general_head">Godown</td>
+                                        <td width="20%">:
+                                            <span t-field="o.location_id"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="2%" class="top_general_head">Driver Name</td>
+                                        <td width="20%">:
+                                            <span t-field="o.driver_id.name"/>
+                                        </td>
+                                        <td width="70%" style="padding-right:40px;" class="text-right">
+                                            <span class="top_general_head" style="padding-right:10px;">Mobile:</span>
+                                            :
+                                            <span t-field="o.mobile"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="2%" class="top_general_head">Vehicle No</td>
+                                        <td width="20%">:
+                                            <span t-field="o.vehicle_no"/>
+                                        </td>
+                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td width="15%" class="top_general_head">Godown</td>-->
+<!--                                        <td width="15%">: <span t-field="o.location_id"/> </td>-->
+
+<!--                                    </tr>-->
                                 </thead>
                             </table>
                             <table class="mt-3" width="100%">
@@ -130,8 +153,8 @@
                                         <tr>
                                             <td class="vertical_middle"> <t t-esc="count_id"/> </td>
                                             <td><span t-field="line.product_id.name"/></td>
-                                            <td><span t-field="line.product_id.article_no"/></td>
-                                            <td><span t-field="line.product_id.finish_no"/></td>
+<!--                                            <td><span t-field="line.product_id.article_no"/></td>-->
+<!--                                            <td><span t-field="line.product_id.finish_no"/></td>-->
                                             <td><span t-field="line.product_uom_id"/></td>
                                             <td class="text-left pl-2"><span t-field="line.qty_done"/></td>
                                         <t t-set="total_quantity" t-value="total_quantity+line.qty_done"/>
