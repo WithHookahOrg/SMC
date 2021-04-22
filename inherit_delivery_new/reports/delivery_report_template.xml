@@ -110,18 +110,18 @@
                                     <tr>
                                         <td width="2%" class="top_general_head">Driver Name</td>
                                         <td width="20%">:
-                                            <span t-field="o.driver_id.name"/>
+<!--                                             <span t-field="o.driver_id.name"/> -->
                                         </td>
                                         <td width="70%" style="padding-right:40px;" class="text-right">
                                             <span class="top_general_head" style="padding-right:10px;">Mobile:</span>
                                             :
-                                            <span t-field="o.mobile"/>
+<!--                                             <span t-field="o.mobile"/> -->
                                         </td>
                                     </tr>
                                     <tr>
                                         <td width="2%" class="top_general_head">Vehicle No</td>
                                         <td width="20%">:
-                                            <span t-field="o.vehicle_no"/>
+<!--                                             <span t-field="o.vehicle_no"/> -->
                                         </td>
                                     </tr>
 <!--                                    <tr>-->
