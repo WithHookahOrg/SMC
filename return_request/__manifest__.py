@@ -23,6 +23,8 @@
         'security/security.xml',
         'views/views.xml',
         'views/templates.xml',
+        'reports/return_request_report.xml',
+        'reports/report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
