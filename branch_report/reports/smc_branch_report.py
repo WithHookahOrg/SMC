@@ -781,10 +781,11 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     [('move_id', '=', rec.move_id.id), ('online_credit_payment', '=', True)])
                 if paymentobj.branch_id.id == rec_model.branch.id:
                     print(creditobj.name)
-                    account_list.append({
-                              'name': str(creditobj.partner_id.name) + ' ' + "("+str(creditobj.journal_id.name)+")",
-                        'debit': rec.debit
-                    })
+                    if rec.debit >0:
+                        account_list.append({
+                                  'name': str(creditobj.partner_id.name) + ' ' + "("+str(creditobj.journal_id.name)+")",
+                            'debit': rec.debit
+                        })
         return account_list
 
     def get_credit_cheques_accounts(self):
@@ -805,11 +806,12 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 paymentobj = self.env['account.payment'].search(
                     [('move_id', '=', rec.move_id.id), ('cheques_payment', '=', True)])
                 if paymentobj.branch_id.id == rec_model.branch.id:
-                    print(creditobj.name)
-                    account_list.append({
-                        'name': str(creditobj.partner_id.name) + ' ' + "(" + str(creditobj.journal_id.name) + ")",
-                        'debit': rec.debit
-                    })
+                    if rec.debit > 0:
+                        print(creditobj.name)
+                        account_list.append({
+                            'name': str(creditobj.partner_id.name) + ' ' + "(" + str(creditobj.journal_id.name) + ")",
+                            'debit': rec.debit
+                        })
         return account_list
 
     def get_corporateSale_otherReceipt(self, corporate=False, receipt=False , cash=False , bank= False):
