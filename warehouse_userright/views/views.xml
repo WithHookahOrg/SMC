@@ -41,6 +41,9 @@
                 <xpath expr="//button[@name='action_assign']" position="attributes">
                     <attribute name="attrs">{'invisible': [('state', '=', 'confirmed')]}</attribute>
                 </xpath>
+                <xpath expr="//button[@name='stock_whatsapp']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state', '=', 'confirmed')]}</attribute>
+                </xpath>
                 <xpath expr="//button[@name='action_get_approvals']" position="attributes">
                     <attribute name="attrs">{'invisible': [('state', '=', 'confirmed')]}</attribute>
                 </xpath>
