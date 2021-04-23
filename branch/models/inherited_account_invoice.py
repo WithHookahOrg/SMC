@@ -15,6 +15,7 @@ class AccountMove(models.Model):
         return branch_id
 
     branch_id = fields.Many2one('res.branch', default=_default_branch_id)
+    # credit_card_check = fields.Boolean("Credit Card", default=False)
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'

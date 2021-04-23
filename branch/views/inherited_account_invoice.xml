@@ -11,6 +11,7 @@
                        position="after">
                     <!-- Add your fields or attributes here -->
                         <field name="branch_id"/>
+<!--                        <field name="credit_card_check"/>-->
                 </xpath>
                 <xpath expr="//field[@name='line_ids']//tree//field[@name='name']" position="after">
                     <field name="branch_id"/>
