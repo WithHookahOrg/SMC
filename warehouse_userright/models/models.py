@@ -11,6 +11,14 @@ class StockPickingInh(models.Model):
     mobile = fields.Char('Mobile', related='driver_id.mobile')
     vehicle_no = fields.Char('Vehicle No')
     note_del = fields.Char('Note')
+    x_css = fields.Html(string='CSS', sanitize=False, compute='_compute_css', store=False)
+
+    def _compute_css(self):
+        for application in self:
+            if self.env.user.has_group('warehouse_userright.group_remove_create_button') and application.state == 'confirmed':
+                application.x_css = '<style>.o_form_button_edit {display: none !important;}</style>'
+            else:
+                application.x_css = False
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
