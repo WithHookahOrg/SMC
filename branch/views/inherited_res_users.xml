@@ -7,18 +7,14 @@
             <field name="model">res.users</field>
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
-                    <xpath expr="//page[@name='references']/group" position="before">
+                <xpath expr="//sheet/notebook/page[2]/group[1]" position="before">
                     <!-- Add your fields or attributes here -->
-                        <group>
-                            <group>
+                    <group name="branch">
                         <field name="branch_ids" widget="many2many_tags"/>
-
-
+                    </group>
+                    <group>
                         <field name="branch_id"/>
                     </group>
-                         </group>
-
-
                 </xpath>
             </field>
         </record>

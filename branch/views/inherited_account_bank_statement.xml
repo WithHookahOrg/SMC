@@ -15,6 +15,10 @@
                     <field name='branch_id'/>
                 </xpath>
 
+                <xpath expr="//field[@name='line_ids']" position="attributes">
+                    <attribute name="context">{'branch_id' : branch_id}</attribute>
+                </xpath>
+
             </field>
         </record>
     </data>

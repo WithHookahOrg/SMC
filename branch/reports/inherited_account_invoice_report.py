@@ -9,4 +9,4 @@ class AccountInvoiceReport(models.Model):
     branch_id = fields.Many2one('res.branch')
 
     def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", line.branch_id as branch_id"
+        return super(AccountInvoiceReport, self)._select() + ", move.branch_id"
