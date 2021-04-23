@@ -2,10 +2,10 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 {
-    "name" : "Financial Reports For Branch -Enterprise Edition Odoo",
+    "name" : "Financial Reports For Branch Enterprise Edition Odoo",
     "version" : "14.0.0.0",
     "category" : "Accounting",
-    'summary': 'This app helps to provide branch wise filter on all Financial statement for Enterprise edition',
+    'summary': 'Multiple Branch Management Multi Branch app Multiple Unit Operating unit branch Invoicing branch financial branch wise filter reports branch reports branch Accounting statement Financial branch Reports for single company with Multi Branches multi company',
     "description": """
       odoo multiple branch accounting reports multiple branch accounting reports multiple branch accounting enterprise reports
       odoo multiple branch enterprise accounting reports multiple branch with accounting reports odoo multiple branch enterprise accounting reports
@@ -132,10 +132,10 @@ operating-Unit Operation for POS,operating-Unit Operation for Sales,operating-Un
 
     """,
     "author": "BrowseInfo",
-    "website" : "www.browseinfo.in",
-    "price": 99,
+    "website" : "https://www.browseinfo.in",
+    "price": 119,
     "currency": 'EUR',
-    "depends" : ['account', 'account_accountant', 'account_reports'],
+    "depends" : ['account', 'account_accountant', 'account_reports','branch'],
     "data": [
             'data/account_financial_report_data.xml',
             'views/search_template_view.xml',
@@ -143,7 +143,7 @@ operating-Unit Operation for POS,operating-Unit Operation for Sales,operating-Un
     'qweb': [],
     "auto_install": False,
     "installable": True,
-    'live_test_url':'https://youtu.be/6OjItOxfGhI',
+    'live_test_url':'https://youtu.be/FUpKbL5c0bQ',
     "images":['static/description/Banner.png'],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

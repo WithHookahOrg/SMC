@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from datetime import datetime
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError , UserError
 
 class PaymentWizardInherit(models.TransientModel):
     _inherit = "account.payment.register"
@@ -10,12 +10,27 @@ class PaymentWizardInherit(models.TransientModel):
     online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
     corporate_sale = fields.Boolean(string="Corporate sale", default=False)
     other_receipt = fields.Boolean(string="Other Receipts", default=False)
-    branch_id = fields.Many2one('res.branch')
+    branch_id = fields.Many2one('res.branch', default=lambda r: r.env.user.branch_id.id)
     type = fields.Selection(related='journal_id.type')
+
+    @api.onchange('branch_id')
+    def onchange_get_branches(self):
+        branches = self.env.user.branch_ids
+
+        print(branches)
+
+        return {'domain': {'branch_id': [('id', 'in', branches.ids)]}}
+
 
 
     def _create_payments(self):
+        if self.journal_id.type == 'bank':
+            if self.cheques_payment == False and self.online_credit_payment == False and self.corporate_sale == False and self.other_receipt == False:
+                raise UserError(_("Must select one option out of 4"))
+
         res = super(PaymentWizardInherit, self)._create_payments()
+
+
         if self.cheques_payment == True:
             res.update({'cheques_payment': True})
 

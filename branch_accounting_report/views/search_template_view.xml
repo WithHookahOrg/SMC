@@ -2,10 +2,10 @@
 <odoo>
     <data>
         <template id="search_template_branch">
-            <a t-if="options.get('branch')" type="button" class="dropdown-toggle account_branch_filter" data-toggle="dropdown">
+            <button t-if="options.get('branch')" type="button" class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle account_analytic_filter" data-toggle="dropdown">
                 <span class="fa fa-folder-open"/> Branch
-            </a>
-            <ul class="dropdown-menu o_filters_menu" role="menu">
+            </button>
+            <ul class="dropdown-menu o_filter_menu" role="menu">
                 <li class="o_account_report_search js_account_branch_m2m"/>
             </ul>
         </template>
