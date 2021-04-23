@@ -4,10 +4,13 @@ odoo.define('ks_odoo11_web_listview_sticky_header.stick_header', function (requi
     ListView.include({
 
     _freezeColumnWidths: function () {
-            if(this.getParent().$el.hasClass("o_field_one2many") !== false || this.getParent().$el.hasClass("o_field_many2many") !== false) {
-                this._super.apply(this,arguments);
-            }
-            else{
+
+
+            try {
+               if(this.getParent().$el.hasClass("o_field_one2many") !== false || this.getParent().$el.hasClass("o_field_many2many") !== false) {
+                    this._super.apply(this,arguments);
+                }
+                else{
                 var self = this;
                 const table = this.el.getElementsByTagName('table')[0];
 
@@ -22,8 +25,6 @@ odoo.define('ks_odoo11_web_listview_sticky_header.stick_header', function (requi
                 function fix_body(position){
                      $("body").css({
                        'position': position,
-
-
                     });
                 }
 
@@ -37,9 +38,14 @@ odoo.define('ks_odoo11_web_listview_sticky_header.stick_header', function (requi
                 }
                 else{
                     fix_body("relative");
-                }
+                    }
                 $("div[class='o_sub_menu']").css("z-index",4);
+                }
             }
+            catch(err) {
+               console.log(err)
+            }
+
         },
 
     _onCellClick: function (event) {
