@@ -70,11 +70,12 @@ class AccountFinancialReportLine(models.Model):
                 for a in range(len(self._context.get('branch_ids'))):
                     where_clause +='%s,'
                     where_clause = where_clause[:-1]
-                    where_clause += '))'
+                    
                     
                 for a in self._context.get('branch_ids'):
                     where_params.append(int(a))
-
+                    
+                where_clause += '))'
             queries.append('''
                 SELECT
                     ''' + (groupby_clause and '%s,' % groupby_clause) + '''
@@ -97,7 +98,7 @@ class AccountFinancialReportLine(models.Model):
             'sum_if_neg': {},
             'count_rows': {},
         }
-
+        print(queries)
         financial_report._cr_execute(options_list[0], ' UNION ALL '.join(queries), params)
         for res in self._cr.dictfetchall():
             # Build the key.
@@ -164,8 +165,7 @@ class AccountFinancialReportLine(models.Model):
                     where_clause = where_clause[:-1]
                     where_clause += '))'
                     
-                for a in self._context.get('branch_ids'):
-                    where_params.append(int(a))
+                
 
             queries.append('''
                 SELECT
