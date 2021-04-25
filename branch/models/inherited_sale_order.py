@@ -7,28 +7,25 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     
+    def _default_branch_id(self):
+        branch_id = self.env['res.users'].browse(self._uid).branch_id.id
+        return branch_id
+
     @api.model
     def default_get(self,fields):
         res = super(SaleOrder, self).default_get(fields)
-        branch_id = warehouse_id = False
-        if self.env.user.branch_id:
-            branch_id = self.env.user.branch_id.id
-        if branch_id:
-            branched_warehouse = self.env['stock.warehouse'].search([('branch_id','=',branch_id)])
+        user_branch = self.env['res.users'].browse(self.env.uid).branch_id
+        if user_branch:
+            branched_warehouse = self.env['stock.warehouse'].search([('branch_id','=',user_branch.id)])
             if branched_warehouse:
-                warehouse_id = branched_warehouse.ids[0]
-        else:
-            warehouse_id = self._default_warehouse_id()
-            warehouse_id = warehouse_id.id
-
-        res.update({
-            'branch_id' : branch_id,
-            'warehouse_id' : warehouse_id
-            })
+                res['warehouse_id'] = branched_warehouse.ids[0]
+            else:
+                res['warehouse_id'] = False
 
         return res
 
-    branch_id = fields.Many2one('res.branch', string="Branch")
+
+    branch_id = fields.Many2one('res.branch', default=_default_branch_id)
 
     
     def _prepare_invoice(self):

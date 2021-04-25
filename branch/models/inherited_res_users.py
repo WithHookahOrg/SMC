@@ -10,6 +10,7 @@ class ResUsers(models.Model):
     branch_id = fields.Many2one('res.branch', string= 'Branch')
 
     def write(self, values):
+        print(values)
         if 'branch_id' in values or 'branch_ids' in values:
             self.env['ir.model.access'].call_cache_clearing_methods()
             self.env['ir.rule'].clear_caches()

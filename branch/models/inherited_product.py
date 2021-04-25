@@ -6,14 +6,8 @@ from odoo import api, fields, models, _
 class ProductTemplateIn(models.Model):
     _inherit = 'product.template'
 
-    
-    @api.model
-    def default_get(self, default_fields):
-        res = super(ProductTemplateIn, self).default_get(default_fields)
-        if self.env.user.branch_id:
-            res.update({
-                'branch_id' : self.env.user.branch_id.id or False
-            })
-        return res
+    def _default_branch_id(self):
+        branch_id = self.env['res.users'].browse(self._uid).branch_id.id
+        return [branch_id]
 
-    branch_id = fields.Many2one('res.branch', string="Branch")
+    branch_ids = fields.Many2many('res.branch', 'res_branch_product_id', 'branch_id', 'product_id', default=_default_branch_id)

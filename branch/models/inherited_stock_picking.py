@@ -6,13 +6,9 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    @api.model
-    def default_get(self, default_fields):
-        res = super(StockPicking, self).default_get(default_fields)
-        if self.env.user.branch_id:
-            res.update({
-                'branch_id' : self.env.user.branch_id.id or False
-            })
-        return res
+    
+    def _default_branch_id(self):
+        branch_id = self.env['res.users'].browse(self._uid).branch_id.id
+        return branch_id
 
-    branch_id = fields.Many2one('res.branch', string="Branch")
+    branch_id = fields.Many2one('res.branch', default=_default_branch_id)
