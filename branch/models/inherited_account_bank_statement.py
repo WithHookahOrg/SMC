@@ -9,7 +9,6 @@ class AccountBankStatement(models.Model):
 
     branch_id = fields.Many2one('res.branch')
 
-    
     def _get_opening_balance(self, journal_id):
         curr_user_id = self.env['res.users'].browse(self.env.context.get('uid', False))
         last_bnk_stmt = self.search([('journal_id', '=', journal_id),('branch_id','=',curr_user_id.branch_id.id)], limit=1)
@@ -20,10 +19,14 @@ class AccountBankStatement(models.Model):
     @api.model
     def default_get(self,fields):
         res = super(AccountBankStatement, self).default_get(fields)
-        res['branch_id']=self.env['res.users'].browse(self.env.uid).branch_id.id
+        branch_id = False
+        if self.env.user.branch_id:
+            branch_id = self.env.user.branch_id.id
+        res.update({
+            'branch_id' : branch_id
+        })
         return res
 
-    
     def button_confirm_bank(self):
         self._balance_check()
         statements = self.filtered(lambda r: r.state == 'open')
@@ -38,7 +41,6 @@ class AccountBankStatement(models.Model):
                 for aml in st_line.journal_entry_ids:
                     aml.branch_id = st_line.branch_id.id
                     moves |= aml.move_id
-
 
             if moves:
                 if self._context.get('session'):
@@ -60,17 +62,3 @@ class AccountBankStatement(models.Model):
             statement.message_post(body=_('Statement %s confirmed, journal items were created.') % (statement.name,))
 
         statements.write({'state': 'confirm', 'date_done': time.strftime("%Y-%m-%d %H:%M:%S")})
-
-
-# class account_bank_statement(models.Model):
-
-#     _inherit = 'account.bank.statement'
-
-#     @api.model
-#     def _get_bank_statement_default_branch(self):
-#         user_pool = self.env['res.users']
-#         branch_id = user_pool.browse(self.env.uid).branch_id.id  or False
-#         print("1111111111111111111111111111branch", branch_id)
-#         return branch_id
-
-#     branch_id = fields.Many2one('res.branch', 'Branch', default=_get_bank_statement_default_branch)
