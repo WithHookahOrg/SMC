@@ -68,10 +68,10 @@ class ResBranchInh(models.Model):
     branch_code = fields.Char('Branch Code')
 
 
-# class ResUserInh(models.Model):
-#     _inherit = 'res.users'
+class ResUserInh(models.Model):
+    _inherit = 'res.users'
 
-#     agent_code = fields.Char('Agent Code')
+    agent_code = fields.Char('Agent Code')
 
 
 
