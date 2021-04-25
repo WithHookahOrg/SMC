@@ -9,9 +9,6 @@
                 <field name="incoterm_id" position="after">
                         <field name="branch_id"/>
                 </field>
-                <xpath expr="//field[@name='order_line']" position="attributes">
-                    <attribute name="context">{'branch_id' : branch_id}</attribute>
-                </xpath>
             </field>
         </record>
 
