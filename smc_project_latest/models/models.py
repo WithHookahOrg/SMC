@@ -6,7 +6,7 @@ from itertools import groupby
 from odoo.tools.float_utils import float_is_zero
 
 
-class smc(models.Model):
+class SMC(models.Model):
     _inherit = 'product.template'
 
     sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand")
@@ -18,7 +18,7 @@ class smc(models.Model):
                     i.sale_discontinued = True
                     i.sale_ok = False
                 elif i.qty_available > 0 and i.purchase_ok == False:
-                    i.sale_discontinued = False
+                    i.sale_discontinued = True
                     i.sale_ok = True
                 else:
                     i.sale_ok = True
