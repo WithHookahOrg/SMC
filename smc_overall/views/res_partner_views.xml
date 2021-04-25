@@ -1,5 +1,49 @@
 <odoo>
 
+	<record id="view_sale_order_form_inh" model="ir.ui.view">
+		<field name="name">sale.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='warehouse_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+            </xpath>
+
+		</field>
+	</record>
+	<record id="view_sale_order_form_ware_inh" model="ir.ui.view">
+		<field name="name">sale.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="warehouse_id"/>
+                </xpath>
+		</field>
+	</record>
+
+	<record id="view_res_user_form_inh" model="ir.ui.view">
+		<field name="name">res.users.form</field>
+		<field name="model">res.users</field>
+		<field name="inherit_id" ref="base.view_users_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//div[@class='oe_title']" position="inside">
+				<group><field name="agent_code"/></group>
+            </xpath>
+		</field>
+	</record>
+
+	<record id="view_res_branch_form_inh" model="ir.ui.view">
+		<field name="name">res.branch.form</field>
+		<field name="model">res.branch</field>
+		<field name="inherit_id" ref="branch.branch_res_branch_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='division_id']" position="after">
+				<field name="branch_code"/>
+            </xpath>
+		</field>
+	</record>
+
     <record id="view_partner_form_inh" model="ir.ui.view">
 		<field name="name">res.partner.form</field>
 		<field name="model">res.partner</field>
@@ -25,11 +69,12 @@
 				<field name="fax" string="Fax"/>
 				<field name="website" string="Website"/>
             </xpath>
-			<xpath expr="//field[@name='property_product_pricelist']" position="after">
-				<field name="customer_rank" invisible="1"/>
-            </xpath>
+<!--			<xpath expr="//field[@name='property_product_pricelist']" position="after">-->
+<!--				<field name="customer_rank" invisible="1"/>-->
+<!--            </xpath>-->
 			<xpath expr="//field[@name='industry_id']" position="after">
 				<field name="supplier_rank" invisible="1"/>
+				<field name="customer_rank" invisible="1"/>
             </xpath>
 			<xpath expr="//sheet/group[1]" position="inside">
 				<group>
