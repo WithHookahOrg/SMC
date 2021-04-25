@@ -69,11 +69,12 @@
 				<field name="fax" string="Fax"/>
 				<field name="website" string="Website"/>
             </xpath>
-			<xpath expr="//field[@name='property_product_pricelist']" position="after">
-				<field name="customer_rank" invisible="1"/>
-            </xpath>
+<!--			<xpath expr="//field[@name='property_product_pricelist']" position="after">-->
+<!--				<field name="customer_rank" invisible="1"/>-->
+<!--            </xpath>-->
 			<xpath expr="//field[@name='industry_id']" position="after">
 				<field name="supplier_rank" invisible="1"/>
+				<field name="customer_rank" invisible="1"/>
             </xpath>
 			<xpath expr="//sheet/group[1]" position="inside">
 				<group>
