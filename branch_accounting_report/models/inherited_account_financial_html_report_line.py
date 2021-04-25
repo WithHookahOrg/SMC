@@ -68,10 +68,10 @@ class AccountFinancialReportLine(models.Model):
             if self._context.get('branch_ids'):
                 where_clause += 'and ("account_move_line"."branch_id" in ('
                 for a in range(len(self._context.get('branch_ids'))):
-                    where_clause +='%s,'
-                    where_clause = where_clause[:-1]
-                    where_clause += '))'
-                    
+                    where_clause += '%s,'
+                where_clause = where_clause[:-1]
+                where_clause += '))'
+
                 for a in self._context.get('branch_ids'):
                     where_params.append(int(a))
 
@@ -160,10 +160,10 @@ class AccountFinancialReportLine(models.Model):
             if self._context.get('branch_ids'):
                 where_clause += 'and ("account_move_line"."branch_id" in ('
                 for a in range(len(self._context.get('branch_ids'))):
-                    where_clause +='%s,'
-                    where_clause = where_clause[:-1]
-                    where_clause += '))'
-                    
+                    where_clause += '%s,'
+                where_clause = where_clause[:-1]
+                where_clause += '))'
+
                 for a in self._context.get('branch_ids'):
                     where_params.append(int(a))
 
