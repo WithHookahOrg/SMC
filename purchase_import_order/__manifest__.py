@@ -20,14 +20,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','purchase', 'purchase_stock','branch'],
+    'depends': ['base', 'purchase', 'purchase_stock', 'branch'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'security/import_order_security.xml',
         'views/views.xml',
-        #'views/templates.xml',
         'data/import_order_seq.xml'
     ],
     # only loaded in demonstration mode

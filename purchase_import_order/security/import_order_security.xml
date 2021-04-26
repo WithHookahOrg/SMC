@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record model="res.groups" id="group_menu_import_order">
-        <field name="name">Menu Import Order</field>
-        <field name="category_id" ref="base.module_category_usability"/>
-        <field name="comment">Purchase/Import Order</field>
+
+    <record model="ir.module.category" id="group_purchase_import_root">
+        <field name="name">Purchase Import</field>
+        <field name="description">Purchase Import</field>
     </record>
+
+    <record id="group_menu_import_order" model="res.groups">
+        <field name="name">Menu Import Order</field>
+        <field name="category_id" ref="group_purchase_import_root"/>
+    </record>
+
+    <record id="group_ceo_approval_order" model="res.groups">
+        <field name="name">Show Ceo Approval CEO Button</field>
+        <field name="category_id" ref="group_purchase_import_root"/>
+    </record>
+
 </odoo>

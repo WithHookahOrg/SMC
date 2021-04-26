@@ -8,14 +8,15 @@
             <field name="model">purchase.order</field>
             <field name="priority" eval="20"/>
             <field name="arch" type="xml">
-<!--                 <xpath expr="//div[hasclass('oe_button_box')]" position="inside">-->
-<!--                <button type="object" name="action_view_picking" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('picking_ids','=',[])]}">-->
-<!--                    <field name="picking_count" widget="statinfo" string="Receipt" help="Incoming Shipments"/>-->
-<!--                    <field name="picking_ids" invisible="1"/>-->
-<!--                </button>-->
-<!--            </xpath-->
                 <form string="Purchase Order" class="o_purchase_order">
                 <header>
+                    <!--                    New Button-->
+                    <button string="Confirm" name="action_confirm" states="draft_new" type="object" class="oe_highlight"/>
+                    <button string="Approve Director" name="action_approve_director" states="director" groups="purchase.group_purchase_manager" type="object" class="oe_highlight"/>
+                    <button string="Approve CEO" name="action_approve_ceo" states="ceo" groups="purchase_import_order.group_ceo_approval_order" type="object" class="oe_highlight"/>
+                    <button string="Create RFQ" name="action_create_rfq" states="approved" groups="purchase.group_purchase_user" type="object" class="oe_highlight"/>
+<!--                    End-->
+
                     <button name="action_rfq_send" states="draft" string="Send by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
                     <button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
                     <button name="button_confirm" type="object" states="sent" string="Confirm Order" class="oe_highlight" id="bid_confirm"/>
@@ -28,10 +29,11 @@
                     <button name="confirm_reminder_mail" string="Confirm Receipt Date" type="object" attrs="{'invisible': ['|','|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('date_planned', '=', False)]}" groups="base.group_no_one"/>
                     <button name="action_create_invoice" string="Create Bill" type="object" context="{'create_bill':True}" attrs="{'invisible': ['|', '|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'not in', ('no', 'invoiced')), ('order_line', '=', [])]}"/>
                     <button name="button_draft" states="cancel" string="Set to Draft" type="object" />
-                    <button name="button_cancel" states="draft,to approve,sent,purchase" string="Cancel" type="object" />
+                    <button name="button_cancel" states="director,ceo,approved,draft,to approve,sent,purchase" string="Cancel" type="object" />
                     <button name="button_done" type="object" string="Lock" states="purchase"/>
                     <button name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,purchase" readonly="1"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft_new,draft,sent,purchase" readonly="1"/>
+
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -250,14 +252,11 @@
                                 <group name="other_info">
                                     <field name="user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
                                     <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
-
                                     <field name="picking_type_id" domain="[('code','=','incoming'), '|', ('warehouse_id', '=', False), ('warehouse_id.company_id', '=', company_id)]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
                                     <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
                                     <field name="default_location_dest_id_usage" invisible="1"/>
                                     <field name="incoterm_id"/>
                                     <field name="branch_id"/>
-
-
                                 </group>
                                 <group name="invoice_info">
                                     <field name="invoice_status" attrs="{'invisible': [('state', 'in', ('draft', 'sent', 'to approve', 'cancel'))]}"/>
@@ -310,47 +309,18 @@
           </field>
       </record>
 
-      <record id="action_lease_contract_inherit" model="ir.actions.act_window">
-          <field name="name">Import Orders</field>
-          <field name="res_model">purchase.order</field>
-          <field name="type">ir.actions.act_window</field>
-          <!--		<field name="view_mode">tree,form,kanban</field>-->
-          <field name="view_mode">form</field>
-          <field name="view_id" ref="pr_import_order_form"/>
-          <field name="domain">[('import_order', '=', True)]</field>
-          <!--		<field name="context">{'form_view_ref': 'purchase.purchase_order_form'}</field>-->
-          <!--        <field name="view_ids" eval="[(5, 0, 0),-->
-          <!--            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase_import_order.pr_import_order_tree')}),-->
-          <!--            (0, 0, {'view_mode': 'form', 'view_id': ref('purchase_import_order.pr_import_order_form')}),-->
-          <!--            (0, 0, {'view_mode': 'kanban'})]"/>-->
-          <!--        <field name="search_view_id" ref="de_purchase_lease.view_purchase_lease_filter"/>-->
-          <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                  No Purchase Lease
-              </p>
-          </field>
-      </record>
-
 
       <record id="pr_import_form_action" model="ir.actions.act_window">
           <field name="name">Import Orders</field>
           <field name="type">ir.actions.act_window</field>
           <field name="res_model">purchase.order</field>
           <field name="view_mode">tree,form,kanban</field>
-          <!--            <field name="view_id" ref="pr_import_order_tree"/>-->
-
-
-          <field name="domain">[('import_order', '=', True),('state','in',('purchase', 'done'))]</field>
+          <field name="domain">[('import_order', '=', True)]</field>
           <field name="context">{'default_import_order': True}</field>
-
-
-
-          <!--            <field name="search_view_id" ref="purchase.purchase_order_view_search"/>-->
           <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase_import_order.pr_import_order_tree')}),
             (0, 0, {'view_mode': 'form', 'view_id': ref('purchase_import_order.pr_import_order_form')}),
             (0, 0, {'view_mode': 'kanban'})]"/>
-
           <field name="help" type="html">
               <p class="o_view_nocontent_smiling_face">
                   No Import order found. Let's create one!
@@ -366,26 +336,14 @@
                  groups="purchase_import_order.group_menu_import_order"/>
 
 
-      <!--        <record id="purchase.purchase_form_action" model="ir.actions.act_window">-->
-      <!--             <field name="view_ids" eval="[(5, 0, 0),-->
-      <!--              (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),-->
-      <!--              (0, 0, {'view_mode': 'form', 'view_id': ref('purchase.purchase_order_form')}),-->
-      <!--              (0, 0, {'view_mode': 'kanban','view_id': ref(purchase.view_purchase_order_kanban)})]"/>-->
-      <!--        </record>-->
-
-
       <record id="proj_import_order_inherit" model="ir.ui.view">
           <field name="name">purchase.order.inherit11</field>
           <field name="model">purchase.order</field>
-
           <field name="inherit_id" ref="purchase_import_order.pr_import_order_form"/>
           <field name="arch" type="xml">
               <xpath expr="//header/button[@name='action_rfq_send']" position="after">
                   <button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
               </xpath>
-              <!--            <xpath expr="//header/button[@name='confirm_reminder_mail']" position="attributes">-->
-              <!--                <attribute name="attrs">{'invisible': ['|', '|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('effective_date', '!=', False)]}</attribute>-->
-              <!--            </xpath>-->
               <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                   <button type="object" name="action_view_picking" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('picking_ids','=',[])]}">
                       <field name="picking_count" widget="statinfo" string="Receipt" help="Incoming Shipments"/>
