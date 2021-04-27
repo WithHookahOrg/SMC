@@ -14,11 +14,11 @@ class AdvancePaymentWizard(models.TransientModel):
     branch_id = fields.Many2one('res.branch')
 
     def default_payment_method_id(self):
-        method = self.env['account.payment.method'].search([('name', '=', 'Manual')], limit=1)
+        method = self.env['account.payment.method'].sudo().search([('name', '=', 'Manual')], limit=1)
         return method.id
 
     def default_journal_id(self):
-        journal = self.env['account.journal'].search([('name', '=', 'Cash')])
+        journal = self.env['account.journal'].sudo().search([('name', '=', 'Cash')])
         return journal.id
 
     journal_id = fields.Many2one('account.journal', default=default_journal_id)
@@ -26,14 +26,14 @@ class AdvancePaymentWizard(models.TransientModel):
     ref = fields.Char('Reference')
 
     def default_currency_id(self):
-        currency = self.env['res.currency'].search([('name', '=', 'PKR')])
+        currency = self.env['res.currency'].sudo().search([('name', '=', 'PKR')])
         return currency.id
 
     currency_id = fields.Many2one('res.currency', default=default_currency_id)
 
     def create_data(self):
         model = self.env.context.get('active_model')
-        rec = self.env[model].browse(self.env.context.get('active_id'))
+        rec = self.env[model].sudo().browse(self.env.context.get('active_id'))
         vals = {
             'journal_id': self.journal_id.id,
             'partner_id': rec.partner_id.id,
