@@ -45,6 +45,6 @@ class AdvancePaymentWizard(models.TransientModel):
             'branch_id': self.branch_id.id,
             'state': 'draft',
         }
-        payment = self.env['account.payment'].create(vals)
+        payment = self.env['account.payment'].sudo().create(vals)
         payment.action_post()
 
