@@ -112,7 +112,7 @@ operating-Unit Operation for POS,operating-Unit Operation for Sales,operating-Un
         'views/branch_template.xml',
     ],
     'qweb': [
-        'static/src/xml/branch.xml',
+        #'static/src/xml/branch.xml',
     ],
     'demo': [],
     'test': [],
