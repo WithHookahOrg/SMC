@@ -64,6 +64,10 @@
         <field name="name">All Invoices</field>
         <field name="active" eval="False"/>
     </record>
+	<record id="account.account_move_rule_group_readonly" model="ir.rule">
+        <field name="name">Readonly Move</field>
+        <field name="active" eval="False"/>
+    </record>
 
     <record id="sale.account_invoice_rule_see_personal" model="ir.rule">
         <field name="name">Personal Invoices</field>
