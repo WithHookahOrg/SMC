@@ -55,21 +55,31 @@ odoo.define('ks_dashboard_ninja_list.ks_dashboard_ninja_list_view_preview', func
             else ks_list_view_name = "Name";
             if (field.ks_list_view_type === "ungrouped" && list_view_data) {
                 var index_data = list_view_data.date_index;
-                for (var i = 0; i < index_data.length; i++) {
-                    for (var j = 0; j < list_view_data.data_rows.length; j++) {
-                        var index = index_data[i]
-                        var date = list_view_data.data_rows[j]["data"][index]
-                        if (date) list_view_data.data_rows[j]["data"][index] = field_utils.format.datetime(moment(moment(date).utc(true)._d), {}, {
-                            timezone: false
-                        });
-                        else list_view_data.data_rows[j]["data"][index] = "";
+                if (index_data){
+                    for (var i = 0; i < index_data.length; i++) {
+                        for (var j = 0; j < list_view_data.data_rows.length; j++) {
+                            var index = index_data[i]
+                            var date = list_view_data.data_rows[j]["data"][index]
+                            if (date){
+                             if( list_view_data.fields_type[index] === 'date'){
+                                    list_view_data.data_rows[j]["data"][index] = field_utils.format.date(moment(moment(date).utc(true)._d), {}, {
+                                timezone: false
+                            });}else{
+                                list_view_data.data_rows[j]["data"][index] = field_utils.format.datetime(moment(moment(date).utc(true)._d), {}, {
+                                timezone: false
+                            });
+                            }
+
+                            }else {list_view_data.data_rows[j]["data"][index] = "";}
+                        }
                     }
                 }
             }
 
             if (field.ks_list_view_data) {
                 var data_rows = list_view_data.data_rows;
-                for (var i = 0; i < list_view_data.data_rows.length; i++) {
+                if (data_rows){
+                    for (var i = 0; i < list_view_data.data_rows.length; i++) {
                     for (var j = 0; j < list_view_data.data_rows[0]["data"].length; j++) {
                         if (typeof(list_view_data.data_rows[i].data[j]) === "number" || list_view_data.data_rows[i].data[j]) {
                             if (typeof(list_view_data.data_rows[i].data[j]) === "number") {
@@ -79,6 +89,7 @@ odoo.define('ks_dashboard_ninja_list.ks_dashboard_ninja_list_view_preview', func
                             list_view_data.data_rows[i].data[j] = "";
                         }
                     }
+                }
                 }
             } else list_view_data = false;
             count = list_view_data && field.ks_list_view_type === "ungrouped" ? count - list_view_data.data_rows.length : false;

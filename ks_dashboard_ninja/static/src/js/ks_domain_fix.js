@@ -48,7 +48,7 @@ odoo.define('ks_dashboard_ninja.domain_fix', function(require) {
         _onShowSelectionButtonClick: function(e) {
             if (this.value && (this.value.includes("%MYCOMPANY") || this.value && this.value.includes("%UID")) ){
                 var temp_value = this.value.includes("%MYCOMPANY") ? this.value.replace('"%MYCOMPANY"', this.getSession().company_id): this.value;
-                temp_value = temp_value.includes("%UID") ? temp_value.replace('"%UID"', this.record.getContext().uid): temp_value;
+                 temp_value = temp_value.includes("%UID") ? temp_value.replace('"%UID"', this.record.getContext().uid): temp_value;
                 e.preventDefault();
                 new view_dialogs.SelectCreateDialog(this, {
                     title: _t("Selected records"),
@@ -58,6 +58,8 @@ odoo.define('ks_dashboard_ninja.domain_fix', function(require) {
                     readonly: true,
                     disable_multiple_selection: true,
                 }).open();
+            }else{
+                this._super.apply(this, arguments);
             }
         },
     });

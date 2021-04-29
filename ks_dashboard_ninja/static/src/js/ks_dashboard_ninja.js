@@ -31,11 +31,12 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
          */
 
         jsLibs: ['/ks_dashboard_ninja/static/lib/js/jquery.ui.touch-punch.min.js',
-            '/ks_dashboard_ninja/static/lib/js/jsPDF.js',
             '/ks_dashboard_ninja/static/lib/js/Chart.bundle.min.js',
             '/ks_dashboard_ninja/static/lib/js/gridstack.min.js',
             '/ks_dashboard_ninja/static/lib/js/gridstack.jQueryUI.min.js',
             '/ks_dashboard_ninja/static/lib/js/chartjs-plugin-datalabels.js',
+            '/ks_dashboard_ninja/static/lib/js/pdfmake.min.js',
+            '/ks_dashboard_ninja/static/lib/js/vfs_fonts.js',
         ],
         cssLibs: ['/ks_dashboard_ninja/static/lib/css/Chart.css',
             '/ks_dashboard_ninja/static/lib/css/Chart.min.css'
@@ -317,6 +318,14 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
 
         ks_set_default_chart_view: function() {
             Chart.plugins.unregister(ChartDataLabels);
+            var backgroundColor = 'white';
+            Chart.plugins.register({
+                beforeDraw: function(c) {
+                    var ctx = c.chart.ctx;
+                    ctx.fillStyle = backgroundColor;
+                    ctx.fillRect(0, 0, c.chart.width, c.chart.height);
+                }
+            });
             Chart.plugins.register({
                 afterDraw: function(chart) {
                     if (chart.data.labels.length === 0) {
@@ -1330,6 +1339,7 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                                 if (action.view_mode.includes('tree')) action.view_mode = action.view_mode.replace('tree', 'list');
                                 for (var i = 0; i < action.views.length; i++) action.views[i][1].includes('tree') ? action.views[i][1] = action.views[i][1].replace('tree', 'list') : action.views[i][1];
                                 action['domain'] = domain || [];
+                                action['search_view_id'] = [action.search_view_id, 'search']
                             } else {
                                 var action = {
                                     name: _t(item_data.name),
@@ -1386,9 +1396,10 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                                 self.ks_dashboard_data.ks_item_data[item_id]['ks_list_view_data'] = result.ks_list_view_data;
                                 self.ks_dashboard_data.ks_item_data[item_id]['ks_list_view_type'] = result.ks_list_view_type;
                                 self.ks_dashboard_data.ks_item_data[item_id]['ks_dashboard_item_type'] = 'ks_list_view';
-
                                 self.ks_dashboard_data.ks_item_data[item_id]['sequnce'] = result.sequence;
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".card-body").empty();
+                                $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_plus").addClass('d-none')
+                                $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_minus").addClass('d-none')
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_drill_up").removeClass('d-none');
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_action_export").addClass('d-none');
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_quick_edit_action_popup").removeClass('d-sm-block ');
@@ -1409,6 +1420,8 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                                 }
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_chart_info").removeClass('d-none')
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_color_option").removeClass('d-none')
+                                $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_plus").addClass('d-none')
+                                $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_minus").addClass('d-none')
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_drill_up").removeClass('d-none');
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_quick_edit_action_popup").removeClass('d-sm-block ');
                                 $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_action_export").addClass('d-none');
@@ -1470,6 +1483,8 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                         $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_quick_edit_action_popup").addClass('d-sm-block ');
                         $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_more_action").removeClass('d-none');
                         $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_dashboard_item_action_export").removeClass('d-none')
+                        $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_plus").removeClass('d-none')
+                        $(self.$el.find(".grid-stack-item[data-gs-id=" + item_id + "]").children()[0]).find(".ks_search_minus").removeClass('d-none')
                         self.ksFetchChartItem(item_id);
                         var updateValue = self.ks_dashboard_data.ks_item_data[item_id]["ks_update_items_data"];
                         if (updateValue) {
@@ -1601,7 +1616,7 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
         _ksRenderActiveMode: function() {
             var self = this
 
-            if (self.grid) {
+            if (self.grid && $('.grid-stack').data('gridstack')) {
                 $('.grid-stack').data('gridstack').disable();
             }
 
@@ -1776,6 +1791,7 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                             if (action.view_mode.includes('tree')) action.view_mode = action.view_mode.replace('tree', 'list');
                             for (var i = 0; i < action.views.length; i++) action.views[i][1].includes('tree') ? action.views[i][1] = action.views[i][1].replace('tree', 'list') : action.views[i][1];
                             action['domain'] = item_data.ks_domain || [];
+                            action['search_view_id'] = [action.search_view_id, 'search']
 
                         } else {
                             var action = {
@@ -1837,6 +1853,9 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                 var item_data = self.ks_dashboard_data.ks_item_data[ids[i]]
                 if (item_data['ks_dashboard_item_type'] == 'ks_list_view') {
                     var item_view = self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]");
+                    var name = item_data.name ?item_data.name : item_data.ks_model_display_name;
+                    item_view.children().find('.ks_list_view_heading').prop('title', name);
+                    item_view.children().find('.ks_list_view_heading').text(name);
                     item_view.find('.card-body').empty();
                     item_view.find('.card-body').append(self.renderListViewData(item_data));
                     var ks_length = JSON.parse(item_data['ks_list_view_data']).data_rows.length;
@@ -1857,12 +1876,10 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                     }
                 } else if (item_data['ks_dashboard_item_type'] == 'ks_tile') {
                     var item_view = self._ksRenderDashboardTile(item_data);
-                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").empty();
-                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").append($(item_view).find('.ks_dashboarditem_id'));
+                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").find(".ks_dashboard_item_hover").replaceWith($(item_view).find('.ks_dashboarditem_id'));
                 } else if (item_data['ks_dashboard_item_type'] == 'ks_kpi') {
                     var item_view = self.renderKpi(item_data);
-                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").empty();
-                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").append($(item_view).find('.ks_dashboarditem_id'));
+                    self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]").find(".ks_dashboard_item_hover").replaceWith($(item_view).find('.ks_dashboarditem_id'));
                 } else {
                     self.grid.removeWidget(self.$el.find(".grid-stack-item[data-gs-id=" + item_data.id + "]"));
                     self.ksRenderDashboardItems([item_data]);
@@ -1909,12 +1926,15 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
 
         _ksSaveCurrentLayout: function() {
             var self = this;
-            var items = $('.grid-stack').data('gridstack').grid.nodes;
+            if ($('.grid-stack').data('gridstack')){
+                var items = $('.grid-stack').data('gridstack').grid.nodes;
+            }
             var grid_config = {}
 
             if (self.ks_dashboard_data.ks_gridstack_config) {
                 _.extend(grid_config, JSON.parse(self.ks_dashboard_data.ks_gridstack_config))
             }
+            if (items){
             for (var i = 0; i < items.length; i++) {
                 grid_config[items[i].id] = {
                     'x': items[i].x,
@@ -1922,6 +1942,7 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                     'width': items[i].width,
                     'height': items[i].height
                 }
+            }
             }
 
             self.ks_dashboard_data.ks_gridstack_config = JSON.stringify(grid_config);
@@ -1942,7 +1963,8 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                 data_rows = list_view_data.data_rows,
                 length = data_rows ? data_rows.length: 0,
                 item_title = item.name;
-            var $ksItemContainer = self.renderListViewData(item)
+            var $ksItemContainer = self.renderListViewData(item);
+            var  ks_data_calculation_type = self.ks_dashboard_data.ks_item_data[item_id].ks_data_calculation_type
             var $ks_gridstack_container = $(QWeb.render('ks_gridstack_list_view_container', {
                 ks_chart_title: item_title,
                 ksIsDashboardManager: self.ks_dashboard_data.ks_dashboard_manager,
@@ -1952,6 +1974,7 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                 offset: 1,
                 intial_count: length,
                 ks_pager: pager,
+                calculation_type: ks_data_calculation_type
             })).addClass('ks_dashboarditem_id');
 
             if (length < 15) {
@@ -1986,10 +2009,19 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                         for (var j = 0; j < list_view_data.data_rows.length; j++) {
                             var index = index_data[i]
                             var date = list_view_data.data_rows[j]["data"][index]
-                            if (date) list_view_data.data_rows[j]["data"][index] = field_utils.format.datetime(moment(moment(date).utc(true)._d), {}, {
+                            if (date){
+                             if( list_view_data.fields_type[index] === 'date'){
+                                    list_view_data.data_rows[j]["data"][index] = field_utils.format.date(moment(moment(date).utc(true)._d), {}, {
+                                timezone: false
+                            });}else{
+                                list_view_data.data_rows[j]["data"][index] = field_utils.format.datetime(moment(moment(date).utc(true)._d), {}, {
                                 timezone: false
                             });
-                            else list_view_data.data_rows[j]["data"][index] = "";
+                            }
+
+                             }else {
+                                list_view_data.data_rows[j]["data"][index] = "";
+                            }
                         }
                     }
                 }
@@ -2011,9 +2043,13 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
                 list_view_data: list_view_data,
                 item_id: item_id,
                 list_type: item.ks_list_view_type,
+                isDrill: self.ks_dashboard_data.ks_item_data[item_id]['isDrill']
             }));
             this.list_container = $ksItemContainer;
-
+            if (list_view_data){
+                var $ksitemBody = this.ksListViewBody(list_view_data,item_id)
+                this.list_container.find('.ks_table_body').append($ksitemBody)
+            }
             if (item.ks_list_view_type === "ungrouped") {
                 $ksItemContainer.find('.ks_list_canvas_click').removeClass('ks_list_canvas_click');
             }
@@ -2024,6 +2060,21 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
             return $ksItemContainer
         },
 
+        ksListViewBody: function(list_view_data, item_id) {
+            var self = this;
+            var itemid = item_id
+            var  ks_data_calculation_type = self.ks_dashboard_data.ks_item_data[item_id].ks_data_calculation_type;
+            var list_view_type = self.ks_dashboard_data.ks_item_data[item_id].ks_list_view_type
+            var $ksitemBody = $(QWeb.render('ks_list_view_tmpl', {
+                        list_view_data: list_view_data,
+                        item_id: itemid,
+                        calculation_type: ks_data_calculation_type,
+                        isDrill: self.ks_dashboard_data.ks_item_data[item_id]['isDrill'],
+                        list_type: list_view_type,
+                    }));
+            return $ksitemBody;
+
+        },
 
         ksSum: function(count_1, count_2, item_info, field, target_1, $kpi_preview, kpi_data) {
             var self = this;
@@ -2326,6 +2377,9 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
 
             //Setting Date Filter Selected Option in Date Filter DropDown Menu
             var date_filter_selected = self.ks_dashboard_data.ks_date_filter_selection;
+            if (self.ksDateFilterSelection == 'l_none'){
+                    var date_filter_selected = self.ksDateFilterSelection;
+            }
             self.$el.find('#' + date_filter_selected).addClass("ks_date_filter_selected");
             self.$el.find('#ks_date_filter_selection').text(self.ks_date_filter_selections[date_filter_selected]);
 
@@ -2447,10 +2501,18 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
         ksChartExportXlsCsv: function(e) {
             var chart_id = e.currentTarget.dataset.chartId;
             var name = this.ks_dashboard_data.ks_item_data[chart_id].name;
+            if (this.ks_dashboard_data.ks_item_data[chart_id].ks_dashboard_item_type === 'ks_list_view'){
             var data = {
                 "header": name,
-                "chart_data": this.ks_dashboard_data.ks_item_data[chart_id].ks_chart_data,
+                "chart_data": this.ks_dashboard_data.ks_item_data[chart_id].ks_list_view_data,
             }
+            }else{
+                var data = {
+                    "header": name,
+                    "chart_data": this.ks_dashboard_data.ks_item_data[chart_id].ks_chart_data,
+            }
+            }
+
             framework.blockUI();
             this.getSession().get_file({
                 url: '/ks_dashboard_ninja/export/' + e.currentTarget.dataset.format,
@@ -2462,13 +2524,24 @@ odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
             });
         },
 
-        ksChartExportPdf: function(e) {
+        ksChartExportPdf : function(e){
+            var self = this;
             var chart_id = e.currentTarget.dataset.chartId;
             var name = this.ks_dashboard_data.ks_item_data[chart_id].name;
-            var base64_image = this.chart_container[chart_id].toBase64Image()
-            var doc = new jsPDF('p', 'mm');
-            doc.addImage(base64_image, 'PNG', 5, 10, 200, 0);
-            doc.save(name);
+            var base64_image = this.chart_container[chart_id].toBase64Image();
+            var $ks_el = $($(self.$el.find(".grid-stack-item[data-gs-id=" + chart_id + "]")).find('.ks_chart_card_body'));
+            var ks_height = $ks_el.height()
+           var ks_image_def = {
+	            content: [{
+                        image: base64_image,
+                        width: 500,
+                        height: ks_height,
+                        }],
+                images: {
+                    bee: base64_image
+                }
+            };
+             pdfMake.createPdf(ks_image_def).download(name + '.pdf');
         },
 
         ksItemExportJson: function(e) {

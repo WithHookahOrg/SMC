@@ -3,56 +3,77 @@
     'name': "Dashboard Ninja",
 
     'summary': """
-    Revamp your Odoo Dashboard like never before! It is one of the best dashboard odoo apps in the market.
+        Revamp your Odoo Dashboard like never before! It is one of the best dashboard odoo apps in the market.
     """,
 
     'description': """
-        Dashboard Ninja v13.0,
-        Odoo Dashboard, 
+        Dashboard Ninja v14.0,
+        Odoo Dashboard,
         Dashboard,
-	    Dashboards,
+        Dashboards,
         Odoo apps,
         Dashboard app,
         HR Dashboard,
-        Sales Dashboard, 
-        inventory Dashboard, 
-        Lead Dashboard, 
-        Opportunity Dashboard, 
+        Sales Dashboard,
+        inventory Dashboard,
+        Lead Dashboard,
+        Opportunity Dashboard,
         CRM Dashboard,
-	    POS,
-	    POS Dashboard,
-	    Connectors,
-	    Web Dynamic,
-	    Report Import/Export,
-	    Date Filter,
-	    HR,
-	    Sales,
-	    Theme,
-	    Tile Dashboard,
-	    Dashboard Widgets,
-	    Dashboard Manager,
-	    Debranding,
-	    Customize Dashboard,
-	    Graph Dashboard,
-	    Charts Dashboard,
-	    Invoice Dashboard,
-	    Project management,
+        POS,
+        POS Dashboard,
+        Connectors,
+        Web Dynamic,
+        Report Import/Export,
+        Date Filter,
+        HR,
+        Sales,
+        Theme,
+        Tile Dashboard,
+        Dashboard Widgets,
+        Dashboard Manager,
+        Debranding,
+        Customize Dashboard,
+        Graph Dashboard,
+        Charts Dashboard,
+        Invoice Dashboard,
+        Project management,
         ksolves,
         ksolves apps,
-        ksolves india pvt. ltd.
+        Ksolves India Ltd.
+        Ksolves India  Limited,
+        odoo dashboard apps
+        odoo dashboard app
+        odoo dashboard module
+        odoo modules
+        dashboards
+        powerful dashboards
+        beautiful odoo dashboard
+        odoo dynamic dashboard
+        all in one dashboard
+        multiple dashboard menu
+        odoo dashboard portal
+        beautiful odoo dashboard
+        odoo best dashboard
+        dashboard for management
+        Odoo custom dashboard
+        odoo dashboard management
+        odoo dashboard apps
+        create odoo dashboard
+        odoo dashboard extension
+        odoo dashboard module
     """,
 
-    'author': "Ksolves India Pvt. Ltd.",
+    'author': "Ksolves India Ltd.",
     'license': 'OPL-1',
     'currency': 'EUR',
     'price': 279.0,
     'website': "https://www.ksolves.com",
-    'maintainer': 'Ksolves India Pvt. Ltd.',
-    'live_test_url': 'https://dashboardninja.kappso.com/web/demo_login',
+    'maintainer': 'Ksolves India  Limited',
+    'live_test_url': 'https://dashboardninja14.kappso.com/web/demo_login',
     'category': 'Tools',
-    'version': '13.0.3.1.1',
+    'version': '14.0.1.0.0',
     'support': 'sales@ksolves.com',
-    'images': ['static/description/new_banner.gif'],
+    'images': ['static/description/ks_dashboard_ninja.gif'],
 
     'depends': ['base', 'web', 'base_setup'],
 
