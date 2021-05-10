@@ -5,7 +5,7 @@
         <!-- Sequences for res.partner -->
         <record id="seq_res_partner" model="ir.sequence">
             <field name="name">Res Partner</field>
-            <field name="code">res.partner</field>
+            <field name="code">res.partner.ref</field>
             <field name="prefix">p%(y)s/%(month)s:</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
