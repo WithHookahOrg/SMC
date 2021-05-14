@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import time
 import babel
-from odoo import models, fields, api, tools, _
+from flectra import models, fields, api, tools, _
 from datetime import datetime
 
 
 class HrPayslipInput(models.Model):
     _inherit = 'hr.payslip.input'
 
-    loan_line_id = fields.Many2one('hr.loan.line', string="Loan Installment", help="Loan installment")
+    loan_line_id = fields.Many2one('hr.loan.line', string="Loan Installment")
 
 
 class HrPayslip(models.Model):
@@ -24,10 +24,10 @@ class HrPayslip(models.Model):
         date_to = self.date_to
         contract_ids = []
 
-        ttyme = datetime.fromtimestamp(time.mktime(time.strptime(str(date_from), "%Y-%m-%d")))
+        ttyme = datetime.fromtimestamp(time.mktime(time.strptime(date_from, "%Y-%m-%d")))
         locale = self.env.context.get('lang') or 'en_US'
         self.name = _('Salary Slip of %s for %s') % (
-            employee.name, tools.ustr(babel.dates.format_date(date=ttyme, format='MMMM-y', locale=locale)))
+        employee.name, tools.ustr(babel.dates.format_date(date=ttyme, format='MMMM-y', locale=locale)))
         self.company_id = employee.company_id
 
         if not self.env.context.get('contract') or not self.contract_id:
@@ -71,9 +71,9 @@ class HrPayslip(models.Model):
                             result['loan_line_id'] = loan_line.id
         return res
 
+    @api.multi
     def action_payslip_done(self):
         for line in self.input_line_ids:
             if line.loan_line_id:
                 line.loan_line_id.paid = True
-                line.loan_line_id.loan_id._compute_loan_amount()
         return super(HrPayslip, self).action_payslip_done()
