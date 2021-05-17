@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="action_contacts" model="ir.actions.act_window">
+        <field name="name">My Branch Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="context">{'default_is_company': True, 'my_branch':1}</field>
+        <field name="domain"></field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a contact in your address book
+          </p><p>
+            Odoo helps you to easily track all activities related to a customer.
+          </p>
+        </field>
+    </record>
+    
+    <menuitem id="res_partner_menu_contacts"
+        name="My Branch Contacts"
+        action="action_contacts"
+        parent="contacts.menu_contacts"
+        sequence="3"/>
+</odoo>
