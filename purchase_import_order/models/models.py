@@ -9,6 +9,17 @@ from odoo import models, fields, api, _
 class PurchaseImportOrder(models.Model):
     _inherit = "purchase.order"
 
+    READONLY_STATES = {
+        'purchase': [('readonly', True)],
+        'done': [('readonly', True)],
+        'cancel': [('readonly', True)],
+    }
+    currency_id = fields.Many2one('res.currency', 'Currency', required=False, states=READONLY_STATES,
+                                  default=lambda self: self.env.company.currency_id.id)
+
+    partner_id = fields.Many2one('res.partner', string='Vendor', required=False, states=READONLY_STATES, change_default=True, tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
+
+
     @api.model
     def _default_picking_type(self):
         return self._get_picking_type(self.env.context.get('company_id') or self.env.company.id)
@@ -16,8 +27,8 @@ class PurchaseImportOrder(models.Model):
     import_order = fields.Boolean(string="Import Order", default=False)
     state = fields.Selection([
         ('draft_new', 'Draft'),
-        ('director', 'Approve'),
-        ('ceo', 'Approve'),
+        ('director', 'Approval for Director Procurement'),
+        ('ceo', 'Approval for CEO'),
         ('approved', 'Approved'),
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),

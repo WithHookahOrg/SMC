@@ -10,13 +10,12 @@
             <field name="arch" type="xml">
                 <form string="Purchase Order" class="o_purchase_order">
                 <header>
-                    <!--                    New Button-->
-                    <button string="Confirm" name="action_confirm" states="draft_new" type="object" class="oe_highlight"/>
-                    <button string="Approve Director" name="action_approve_director" states="director" groups="purchase.group_purchase_manager" type="object" class="oe_highlight"/>
+                    <!--                    New Buttons-->
+                    <button string="Confirm" name="action_confirm" states="draft_new" groups="purchase_import_order.group_sale_manager_import" type="object" class="oe_highlight"/>
+                    <button string="Approve Director" name="action_approve_director" states="director" groups="purchase_import_order.group_purchase_manager_import" type="object" class="oe_highlight"/>
                     <button string="Approve CEO" name="action_approve_ceo" states="ceo" groups="purchase_import_order.group_ceo_approval_order" type="object" class="oe_highlight"/>
-                    <button string="Create RFQ" name="action_create_rfq" states="approved" groups="purchase.group_purchase_user" type="object" class="oe_highlight"/>
+                    <button string="Create RFQ" name="action_create_rfq" states="approved" groups="purchase_import_order.group_purchase_user_import" type="object" class="oe_highlight"/>
 <!--                    End-->
-
                     <button name="action_rfq_send" states="draft" string="Send by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
                     <button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
                     <button name="button_confirm" type="object" states="sent" string="Confirm Order" class="oe_highlight" id="bid_confirm"/>
@@ -32,8 +31,7 @@
                     <button name="button_cancel" states="director,ceo,approved,draft,to approve,sent,purchase" string="Cancel" type="object" />
                     <button name="button_done" type="object" string="Lock" states="purchase"/>
                     <button name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft_new,draft,sent,purchase" readonly="1"/>
-
+                    <field name="state" widget="statusbar" statusbar_visible="draft_new,director,ceo,approved,draft,sent,purchase" readonly="1"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
